@@ -1,9 +1,10 @@
 import React from 'react'
+import EditorComponent from '../components/Editor_component'
 
 const Editor = () => {
     return (
         <div>
-            editor
+            <EditorComponent />
         </div>
     )
 }
