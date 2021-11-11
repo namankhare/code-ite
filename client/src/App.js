@@ -1,16 +1,17 @@
 import React from "react";
-import Headers from './components/header'
-import Leftsec from "./components/left_section";
-import {BrowserRouter as Router,Switch,Route,} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Home from './core/Home'
+import Login from "./core/Login";
+import Editor from "./core/Editor";
 
 function App() {
   return (
     <Router>
-    <div className="App">
-      <Headers/>
-      <Leftsec/>
-     
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/join" element={<Editor />} />
+      </Routes>
     </Router>
   );
 }
