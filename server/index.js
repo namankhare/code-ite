@@ -31,14 +31,18 @@ app.use("/room", useRouter)
 
 
 io.on("connection", (socket) => {
-
-  socket.on("join-room", (roomId, userId, userName) => {
-    console.log("roomid", roomId)
+  console.log(`I'm connected with the back-end from backedn`);
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+  socket.on("join-room", (roomId, userId) => {
+    console.log("roomid", roomId, userId)
     socket.join(roomId);
     // socket.to(roomId).broadcast.emit("user-connected", userId);
     socket.broadcast.to(roomId).emit('user-connected', userId);
+
     socket.on("message", (message) => {
-      io.to(roomId).emit("createMessage", message, userName);
+      io.to(roomId).emit("createMessage", message);
     });
   });
 });

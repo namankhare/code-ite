@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Editor from "@monaco-editor/react";
 import loader from "@monaco-editor/loader";
 import { ClockLoader as Loader } from "react-spinners";
-import io from "socket.io-client";
-const socket = io.connect('/');
+import { disconnectSocket, initiateSocketConnection, recieveSync, sendSync, subscribeToChat, sync } from '../socketio.service';
+
+
 
 loader.init().then(monaco => {
     monaco.editor.defineTheme('myTheme', {
@@ -20,21 +21,34 @@ loader.init().then(monaco => {
 });
 
 const IDE = () => {
+
+
     const [ideCode, setIdeCode] = useState("ini")
     function handleEditorDidMount(editor) {
         editor.focus();
     }
     const onChange = (newValue, e) => {
-        socket.send(newValue)
+        sendSync(newValue)
         setIdeCode(newValue)
 
     };
 
     useEffect(() => {
-        socket.on("createMessage", (data) => {
-            setIdeCode(data)
-            console.log(data)
+
+        initiateSocketConnection();
+        subscribeToChat((err, data) => {
+            console.log(data);
         });
+        recieveSync((err, data) => {
+            setIdeCode(data)
+        });
+        return () => {
+            disconnectSocket();
+        }
+        // socket.on("createMessage", (data) => {
+        //     setIdeCode(data)
+        //     console.log(data)
+        // });
     }, []);
 
     return (
