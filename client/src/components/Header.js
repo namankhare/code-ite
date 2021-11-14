@@ -1,6 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+// const currentTab = (history, path) => {
+//   if (history.location.pathname === path) {
+//     return { color: "var(--text-color)", fontWeight: "bold" }
+//   } else {
+//     return { color: "var(--text-color)" }
+//   }
+// }
+
 const Header = () => {
   return (
     <>

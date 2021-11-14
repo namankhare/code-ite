@@ -1,12 +1,20 @@
 import React from 'react'
-import EditorComponent from '../components/Editor_component'
+import IDE from '../components/IDE'
+// import Output from '../components/Output'
+import Whiteboard from '../components/Whiteboard'
+import "../assets/css/Editor.css";
+
 
 const Editor = () => {
     return (
-        <div>
-            <EditorComponent />
+        <div className="d-flex">
+            <IDE />
+            <Whiteboard />
+            {/* <Output /> */}
+
         </div>
     )
 }
 
 export default Editor
+

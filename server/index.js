@@ -4,7 +4,7 @@ var cors = require('cors')
 const useRouter = require("./route")
 const server = require("http").Server(app);
 
-app.use(cors())
+app.use(cors('*'))
 app.use(express.json());
 
 //set view engine

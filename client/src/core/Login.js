@@ -30,6 +30,7 @@ const Login = () => {
       })
       .catch(function (error) {
         console.log(error);
+        setLogin("Invalid Username or Password.")
       });
   };
 
@@ -39,12 +40,12 @@ const Login = () => {
         <img src={backArrow} alt="arrow" className="backArrow" />
         <h3>{"<Code-ite />"}</h3>
       </nav>
-      <div className="login-container">
-        <div className="right">
-          <form>
+      <div className="login-container container-fluid">
+        <div className="left">
+          <form className="LoginForm">
             <h1>Login</h1>
             <div className="form-group-1">
-              <label htmlFor="exampleInputEmail1">Email address</label>
+              <label htmlFor="exampleInputEmail1" >Email address</label>
               <input
                 type="email"
                 className="form-control"
@@ -64,21 +65,21 @@ const Login = () => {
                 ref={password}
               />
             </div>
-            <div className="btn-wrapper">
+            <div className="container m-3 ">
               <input
                 type="button"
                 onClick={() => {
                   loginReq();
                 }}
                 value="Login"
-                className="btn btn-dark login-button"
+                className="btn btn-dark m-4 px-5 py-2 login-button"
               />
             </div>
             {/* <input type="button" onClick={() => { testdetails() }} /> */}
           </form>
-          <h3 className="alert">Incorrect Credentials. Please try again</h3>
+          <h3 className="alert">{login}</h3>
         </div>
-        <div className="left">
+        <div className="right d-none d-md-none d-lg-block">
           <img src={poster} alt="back" className="poster" />
         </div>
       </div>

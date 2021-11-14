@@ -26,14 +26,14 @@ nav {
   padding: 0;
 }
 
-.right {
+.left {
   width: 40%;
   padding: 50px;
   margin: 30px 40px;
   /* border: 1px solid black; */
 }
 
-form {
+.LoginForm {
   padding-top: 30px;
 }
 
@@ -53,17 +53,20 @@ h1 {
 
 label {
   padding: 10px 0;
-  padding-left: 48px;
+  padding-left: 45px;
+  margin-left: 10px;
 }
 
 .form-control {
   border-radius: 0;
   border: 1px solid black;
+
   width: 80%;
+
   margin: auto;
 }
 
-.left {
+.right {
   width: 55%;
   padding: 50px;
   margin: 30px 20px;
@@ -77,9 +80,6 @@ label {
   margin-left: 20px;
 }
 
-.btn-wrapper {
-}
-
 .login-button {
   border-radius: 0;
 }
@@ -87,4 +87,10 @@ label {
 .alert {
   text-align: center;
   font-size: 15px;
+}
+
+@media only screen and (max-width: 993px) {
+  .left {
+    width: 100%;
+  }
 }
