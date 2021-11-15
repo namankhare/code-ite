@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client';
 import { API } from './backend';
 
+
 let socket;
 
 export const initiateSocketConnection = () => {
@@ -13,9 +14,8 @@ export const disconnectSocket = () => {
     if (socket) socket.disconnect();
 }
 
-export const subscribeToChat = (cb) => {
-    socket.emit("join-room", '1', 'nk');
-
+export const subscribeToChat = (room, ranUser) => {
+    socket.emit("join-room", room, ranUser);
 }
 export const sendSync = (cb) => {
     // console.log(cb)
