@@ -6,6 +6,10 @@ import { useParams } from 'react-router-dom'
 import Whiteboard from '../components/Whiteboard'
 import "../assets/css/Editor.css";
 import { disconnectSocket, subscribeToChat } from '../socketio.service'
+import { Split } from '@geoffcox/react-splitter';
+import Output from '../components/Output'
+import Input from '../components/Input'
+
 
 const Editor = () => {
     const { room } = useParams();
@@ -29,10 +33,14 @@ const Editor = () => {
     return (
         <>
             <Header />
-            <div className="d-flex">
-                <IDE />
-                <Whiteboard />
-                {/* <Output /> */}
+            <div className="d-flex" >
+                <Split initialPrimarySize='50%'>
+                    <Split horizontal initialPrimarySize="60%">
+                        <IDE />
+                        <Input />
+                    </Split>
+                    <Whiteboard />
+                </Split>
 
             </div>
         </>

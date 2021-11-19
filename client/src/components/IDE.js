@@ -43,12 +43,12 @@ const IDE = () => {
 
     return (
         <>
-            <div className="container-fluid IDE mx-2 " style={{ "height": "750px", "width": "60%" }}>
+            <div className="container-fluid IDE mx-2 " style={{ "height": "750px", "width": "100%" }}>
                 <div className="container d-flex justify-content-between m-1 p-1">
                     <div className=" d-flex" style={{ "paddingLeft": "0px" }}>
                         {/* <label className="form-check-label me-3 ps-0" htmlFor="flexSwitchCheckDefault">Language</label> */}
 
-                        <select className="form-select" style={{ "width": "100%", "border": "1px solid black", "border-radius": "0", "font-size": "14px" }} aria-label="Default select example">
+                        <select className="form-select" style={{ "width": "100%", "border": "1px solid black", "borderRadius": "0", "fontSize": "14px" }} aria-label="Default select example">
                             <option value="0">Language</option>
                             <option value="1">C++</option>
                             <option value="2">JavaScript</option>
@@ -59,7 +59,7 @@ const IDE = () => {
                         type="button"
                         className="btn btn-outline-dark px-3 py-1 text-nowrap  mx-1"
                         id="btnn"
-                        style={{ "border": "1px solid black", "font-size": "14px" }}
+                        style={{ "border": "1px solid black", "fontSize": "14px", "boxShadow": "none" }}
                     >
                         Run
                     </button>
