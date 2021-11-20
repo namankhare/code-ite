@@ -4,7 +4,8 @@ import ResizeObserver from 'rc-resize-observer';
 import '../assets/css/Wb.css'
 import Pencil from "../assets/svg/Pencil.svg";
 import Eraser from "../assets/svg/Eraser.svg";
-import Clear from "../assets/svg/Clear.svg";
+import ClearImg from "../assets/svg/Clear.svg";
+import EraserCursor from "../assets/svg/Eraser-Cursor.png";
 
 
 
@@ -12,6 +13,7 @@ const Whiteboard = () => {
     const canvasRef = useRef(null);
     const canvasSize = useRef("");
     const colorsRef = useRef(null);
+    // const [cursor, setCursor] = useState('pencilCursor')
     // const socketRef = useRef();
     var isPencil = "pencil";
 
@@ -23,7 +25,7 @@ const Whiteboard = () => {
         context.clearRect(0, 0, canvas.width, canvas.height);
     }
     const clickPencil = () => {
-
+        
         isPencil = "pencil";
         console.log(isPencil)
     }
@@ -49,6 +51,7 @@ const Whiteboard = () => {
 
         const current = {
             color: 'black',
+            cursor: 'crosshair',
         };
 
 
@@ -224,29 +227,29 @@ const Whiteboard = () => {
 
             <div className="container-fluid d-flex-column" id="whiteboard" ref={canvasSize} style={{ "width": "100%", "height": "80vh" }} >
                 <div className="d-flex justify-content-between my-2">
-                    <div ref={colorsRef} className="colors">
+                    <div ref={colorsRef} className="colors d-flex">
                         <div className="color black" />
                         <div className="color red" />
                         <div className="color green" />
                         <div className="color blue" />
                         <div className="color yellow" />
                     </div>
-                    <div className="mx-2">
+                    <div className="d-flex justify-content-end mx-2">
 
 
-                        <button type="button" className="btn btn-outline-dark px-3 py-1 text-nowrap mx-1" id="btnn" style={{ "border": "1px solid black", "fontSize": "10px", "boxShadow": "none" }}
-                            onClick={() => (clickEraser())}>Eraser
+                        {/* <button type="button" className="btn btn-outline-dark px-3 py-1 text-nowrap mx-1" id="btnn" style={{ "border": "1px solid black", "fontSize": "10px", "boxShadow": "none" }}
+                            >Eraser
                         </button>
                         <button className="btn btn-outline-dark px-3 py-1 text-nowrap mx-1" id="btnn" style={{ "border": "1px solid black", "fontSize": "10px", "boxShadow": "none" }}
-                            onClick={() => (clickPencil())}> Pencil
+                            > Pencil
                         </button>
                         <button className="btn btn-outline-dark px-3 py-1 text-nowrap mx-1" id="btnn" style={{ "border": "1px solid black", "fontSize": "10px", "boxShadow": "none" }}
-                            onClick={() => (Clear())}>Clear
-                        </button>
-                        {/* 
-                        <img src={Pencil} alt="" style={{ "width": "3%" }} />
-                        <img src={Eraser} alt="" style={{ "width": "3%" }} /> */}
-                        {/* <img src={Clear} alt="" style={{ "width": "3%" }} /> */}
+                            >Clear
+                        </button> */}
+                        
+                        <img src={Pencil} alt="" height="22px" width="22px" className="mx-2" onClick={() => (clickPencil())}/>
+                        <img src={Eraser} alt="" height="22px" width="22px" className="mx-2 customCursor"  onClick={() => (clickEraser())}/>
+                        <img src={ClearImg} alt="" height="22px" width="22px" className="mx-2" onClick={() => (Clear())}/>
 
                     </div>
                 </div>
@@ -257,7 +260,7 @@ const Whiteboard = () => {
                     canvas.height = canvasRef.current.offsetHeight;
                 }}
                 >
-                    <canvas ref={canvasRef} className="whiteboard" />
+                    <canvas ref={canvasRef} className="whiteboard eraserCursor" />
                 </ResizeObserver>
 
                 <div className=""><Output /></div>
