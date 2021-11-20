@@ -4,6 +4,8 @@ import { API } from "../backend";
 import "../assets/css/Login.css";
 import backArrow from "../assets/svg/backArrow.svg";
 import poster from "../assets/svg/poster.svg";
+import { Link } from "react-router-dom";
+
 
 const Login = () => {
   const email = useRef("");
@@ -37,7 +39,10 @@ const Login = () => {
   return (
     <div className="wrapper">
       <nav>
-        <img src={backArrow} alt="arrow" className="backArrow" />
+        <Link style={{ "width": "50px" }} to="/">
+          <img src={backArrow} alt="arrow" className="backArrow" />
+        </Link>
+
         <h3>{"<Code-ite />"}</h3>
       </nav>
       <div className="login-container container-fluid">
@@ -88,3 +93,5 @@ const Login = () => {
 };
 
 export default Login;
+
+

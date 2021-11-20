@@ -34,8 +34,8 @@ const Editor = () => {
         <>
             <Header />
             <div className="d-flex" >
-                <Split initialPrimarySize='50%'>
-                    <Split horizontal initialPrimarySize="60%">
+                <Split initialPrimarySize='60%'>
+                    <Split horizontal initialPrimarySize="67%">
                         <IDE />
                         <Input />
                     </Split>

@@ -39,8 +39,8 @@
 }
 
 .whiteboard.eraserCursor {
-  /* cursor: url("../svg/Eraser-Cursor.png"), auto; */
-  cursor: wait;
+  cursor: url("../svg/Eraser-Cursor.png") 8 8, pointer;
+  /* cursor: wait; */
 }
 .whiteboard.pencilCursor {
   /* cursor: url("../svg/Eraser-Cursor.png"), auto; */

@@ -15,7 +15,7 @@ const Input = () => {
                     Clear
                 </button>
             </div>
-            <textarea rows="4" style={{ "width": "100%" }} cols="109" className="mt-2" defaultValue="Suyo this side">
+            <textarea rows="4" style={{ "width": "100%", "fontSize": "14px" }} cols="109" className="mt-2" defaultValue="Suyo this side">
 
             </textarea>
         </div >

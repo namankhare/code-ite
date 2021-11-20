@@ -46,7 +46,7 @@ const IDE = () => {
 
     return (
         <>
-            <div className="container-fluid IDE mx-2 " style={{ "height": "750px", "width": "100%" }}>
+            <div className="container-fluid IDE mx-2 " style={{ "height": "80vh", "width": "100%" }}>
                 <div className="container d-flex justify-content-between m-1 p-1">
                     <div className=" d-flex" style={{ "paddingLeft": "0px" }}>
                         {/* <label className="form-check-label me-3 ps-0" htmlFor="flexSwitchCheckDefault">Language</label> */}

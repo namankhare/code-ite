@@ -5,17 +5,17 @@ import '../assets/css/Wb.css'
 import Pencil from "../assets/svg/Pencil.svg";
 import Eraser from "../assets/svg/Eraser.svg";
 import ClearImg from "../assets/svg/Clear.svg";
-import EraserCursor from "../assets/svg/Eraser-Cursor.png";
-
 
 
 const Whiteboard = () => {
     const canvasRef = useRef(null);
     const canvasSize = useRef("");
     const colorsRef = useRef(null);
-    // const [cursor, setCursor] = useState('pencilCursor')
+
+    const [isPencilCursor, setIsPencilCursor] = useState(true)
+
+
     // const socketRef = useRef();
-    var isPencil = "pencil";
 
     // Clear Whiteboard
     const Clear = () => {
@@ -25,51 +25,35 @@ const Whiteboard = () => {
         context.clearRect(0, 0, canvas.width, canvas.height);
     }
     const clickPencil = () => {
-
-        isPencil = "pencil";
-        console.log(isPencil)
+        setIsPencilCursor(true)
     }
     const clickEraser = () => {
-
-        isPencil = "eraser"
-        console.log(isPencil)
+        setIsPencilCursor(false)
     }
 
-
-
     useEffect(() => {
-
         const canvas = canvasRef.current;
-        const test = colorsRef.current;
         const context = canvas.getContext('2d');
-        //Test eraser
-
-        console.log()
         const colors = document.getElementsByClassName('color');
-        console.log(colors, 'the colors');
-        console.log(test);
 
         const current = {
             color: 'black',
-            cursor: 'crosshair',
         };
-
 
         const onColorUpdate = (e) => {
             current.color = e.target.className.split(' ')[1];
         };
 
-
-
-
         for (let i = 0; i < colors.length; i++) {
             colors[i].addEventListener('click', onColorUpdate, false);
         }
         let drawing = false;
+        let useEraser = false;
 
         // ------------------------------- create the drawing ----------------------------
 
         const drawLine = (x0, y0, x1, y1, color, emit) => {
+            context.globalCompositeOperation = "source-over";
             context.beginPath();
             context.moveTo(x0, y0);
             context.lineTo(x1, y1);
@@ -90,32 +74,22 @@ const Whiteboard = () => {
             //     color,
             // });
         };
-        const eraseLine = (x0, y0, x1, y1, color, emit) => {
+        const eraseLine = (x0, y0, x1, y1, color) => {
+            context.globalCompositeOperation = "destination-out";
             context.beginPath();
             context.moveTo(x0, y0);
             context.lineTo(x1, y1);
             context.strokeStyle = color;
-            context.lineWidth = 10;
+            context.lineWidth = 16;
             context.stroke();
             context.closePath();
 
-            if (!emit) { return; }
-            // const w = canvas.width;
-            // const h = canvas.height;
-
-            // socketRef.current.emit('drawing', {
-            //     x0: x0 / w,
-            //     y0: y0 / h,
-            //     x1: x1 / w,
-            //     y1: y1 / h,
-            //     color,
-            // });
         };
 
         // ---------------- mouse movement --------------------------------------
 
         const onMouseDown = (e) => {
-            console.log("onMouseDown", isPencil);
+            // console.log("onMouseDown", canvasRef.current.classList[1]);
             e.preventDefault()
             const customLeft = canvasRef.current.offsetLeft
             const customTop = canvasRef.current.offsetTop
@@ -123,26 +97,28 @@ const Whiteboard = () => {
             const eClientY = parseInt((e.pageY) - (customTop))
             current.x = eClientX || parseInt(e.touches[0].pageX - (customLeft));
             current.y = eClientY || parseInt((e.touches[0].pageY) - (customTop));
-            if (isPencil === "pencil") {
+            if (canvas.classList[1] === "pencilCursor") {
                 drawing = true;
-                context.globalCompositeOperation = "source-over";
+                useEraser = false;
 
                 //final
                 drawLine(current.x, current.y, eClientX || parseInt(e.touches[0].pageX - (customLeft)), eClientY || parseInt((e.touches[0].pageY) - (customTop)), current.color, true);
-            } else if (isPencil === "eraser") {
-                context.globalCompositeOperation = "destination-out";
-                eraseLine(current.x, current.y, eClientX || parseInt(e.touches[0].pageX - (customLeft)), eClientY || parseInt((e.touches[0].pageY) - (customTop)), current.color, true);
+            } else if (canvas.classList[1] === "eraserCursor") {
+
+                useEraser = true;
+                drawing = false;
+
+                eraseLine(current.x, current.y, eClientX || parseInt(e.touches[0].pageX - (customLeft)), eClientY || parseInt((e.touches[0].pageY) - (customTop)), current.color);
 
             }
         };
 
         const onMouseMove = (e) => {
             e.preventDefault()
-            console.log("tysfsdfsdfsdf", isPencil);
-            if (isPencil === "pencil") {
-                context.globalCompositeOperation = "source-over";
+            // console.log("onMouseMove", canvas.classList[1]);
+            if (canvas.classList[1] === "pencilCursor") {
                 if (!drawing) { return; }
-                // console.log("touch move", e.touches[0].pageX)
+
                 //const
                 const customLeft = canvasRef.current.offsetLeft
                 const customTop = canvasRef.current.offsetTop
@@ -155,13 +131,15 @@ const Whiteboard = () => {
 
                 current.x = eClientX || parseInt(e.touches[0].pageX - (customLeft));
                 current.y = eClientY || parseInt((e.touches[0].pageY) - (customTop));
-            } else if (isPencil === "eraser") {
+            } else if (canvas.classList[1] === "eraserCursor") {
+                if (!useEraser) { return; }
+
+                // if (!drawing) { return; }
                 const customLeft = canvasRef.current.offsetLeft
                 const customTop = canvasRef.current.offsetTop
                 const eClientX = parseInt((e.pageX) - (customLeft))
                 const eClientY = parseInt((e.pageY) - (customTop))
-                context.globalCompositeOperation = "destination-out";
-                eraseLine(current.x, current.y, eClientX || parseInt(e.touches[0].pageX - (customLeft)), eClientY || parseInt((e.touches[0].pageY) - (customTop)), current.color, true);
+                eraseLine(current.x, current.y, eClientX || parseInt(e.touches[0].pageX - (customLeft)), eClientY || parseInt((e.touches[0].pageY) - (customTop)), current.color);
                 current.x = eClientX || parseInt(e.touches[0].pageX - (customLeft));
                 current.y = eClientY || parseInt((e.touches[0].pageY) - (customTop));
             }
@@ -170,9 +148,10 @@ const Whiteboard = () => {
 
         const onMouseUp = (e) => {
             e.preventDefault()
-            if (!drawing) { return; }
+            if (!drawing && !useEraser) { return; }
             drawing = false;
-            // console.log("touch up", e.touches[0].pageX)
+            useEraser = false;
+
 
         };
 
@@ -218,8 +197,7 @@ const Whiteboard = () => {
         // const clear = () => {
         //     context.clearRect(0, 0, canvas.width, canvas.height)
         // }
-
-    }, [isPencil]);
+    }, []);
 
 
     return (
@@ -236,17 +214,6 @@ const Whiteboard = () => {
                     </div>
                     <div className="d-flex justify-content-end mx-2">
 
-
-                        {/* <button type="button" className="btn btn-outline-dark px-3 py-1 text-nowrap mx-1" id="btnn" style={{ "border": "1px solid black", "fontSize": "10px", "boxShadow": "none" }}
-                            >Eraser
-                        </button>
-                        <button className="btn btn-outline-dark px-3 py-1 text-nowrap mx-1" id="btnn" style={{ "border": "1px solid black", "fontSize": "10px", "boxShadow": "none" }}
-                            > Pencil
-                        </button>
-                        <button className="btn btn-outline-dark px-3 py-1 text-nowrap mx-1" id="btnn" style={{ "border": "1px solid black", "fontSize": "10px", "boxShadow": "none" }}
-                            >Clear
-                        </button> */}
-
                         <img src={Pencil} alt="" height="22px" width="22px" className="mx-2" onClick={() => (clickPencil())} />
                         <img src={Eraser} alt="" height="22px" width="22px" className="mx-2 customCursor" onClick={() => (clickEraser())} />
                         <img src={ClearImg} alt="" height="22px" width="22px" className="mx-2" onClick={() => (Clear())} />
@@ -260,16 +227,11 @@ const Whiteboard = () => {
                     canvas.height = canvasRef.current.offsetHeight;
                 }}
                 >
-                    <canvas ref={canvasRef} className="whiteboard eraserCursor" />
+                    <canvas ref={canvasRef} className={`${isPencilCursor ? "whiteboard pencilCursor" : "whiteboard eraserCursor"}`} />
                 </ResizeObserver>
 
                 <div className=""><Output /></div>
-
-
             </div>
-
-
-
         </>
     )
 }
