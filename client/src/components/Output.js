@@ -3,7 +3,7 @@ import ArrowDown from "../assets/svg/down-arrow.svg";
 
 const Output = () => {
     return (
-        <div className="container-fluid d-none" style={{ "border": "1x solid black", "height": "100%" }}>
+        <div className="container-fluid  " style={{ "border": "1x solid black", "height": "100%" }}>
             <div className="d-flex justify-content-between m-1 p-1 bg-light" >
                 <h5 style={{ "fontWeight": "400", "fontSize": "16px" }}>Output</h5>
                 <img src={ArrowDown} alt="" style={{ "width": "3%" }} />

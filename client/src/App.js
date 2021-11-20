@@ -4,7 +4,6 @@ import Home from './core/Home'
 import Login from "./core/Login";
 import Editor from "./core/Editor";
 import { v4 as uuidv4 } from 'uuid';
-import Whiteboard from "./components/Whiteboard";
 
 
 function App() {
@@ -17,7 +16,7 @@ function App() {
         <Route path="/join" element={<Navigate replace to={`/room/${uuidv4()}`} />} />
         <Route path="/room" element={<Navigate replace to="/" />} />
         <Route path="/room/:room" element={<Editor />} />
-        <Route path="white" element={<Whiteboard />} />
+
       </Routes>
     </Router>
   );

@@ -6,8 +6,10 @@
 }
 .color {
   display: inline-block;
-  height: 48px;
-  width: 48px;
+  height: 17px;
+  width: 17px;
+  border-radius: 12px;
+  margin: 2px 4px;
 }
 
 .color.black {
@@ -33,5 +35,5 @@
   /* margin: 0;
   padding: 0; */
   width: 100%;
-  height: 80vh;
+  height: 60vh;
 }

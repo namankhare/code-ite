@@ -3,7 +3,37 @@ const app = express()
 var cors = require('cors')
 const useRouter = require("./route")
 const server = require("http").Server(app);
+// //yaha
+// var Y = require('yjs')
 
+// var minimist = require('minimist')
+// require('y-memory')(Y)
+// try {
+//   require('y-leveldb')(Y)
+// } catch (err) { }
+// require('y-websockets-server')(Y)
+// // try {
+// //   // try to require local y-websockets-server
+// //   // require('./y-websockets-server.js')(Y)
+// // } catch (err) {
+// //   // otherwise require global y-websockets-server
+
+// // }
+
+// var options = minimist(process.argv.slice(2), {
+//   string: ['port', 'debug', 'db'],
+//   default: {
+//     port: process.env.PORT || '1234',
+//     // port: server,
+//     debug: false,
+//     db: 'memory'
+//   }
+// })
+// var port = Number.parseInt(options.port, 10)
+// // var io = require('socket.io')(port)
+
+
+//khatm
 app.use(cors('*'))
 app.use(express.json());
 
@@ -16,6 +46,27 @@ const io = require("socket.io")(server, {
     origin: '*'
   }
 });
+
+function getInstanceOfY(room) {
+  if (global.yInstances[room] == null) {
+    global.yInstances[room] = Y({
+      db: {
+        name: options.db,
+        dir: 'y-leveldb-databases',
+        namespace: room
+      },
+      connector: {
+        name: 'websockets-server',
+        room: room,
+        io: io,
+        debug: !!options.debug
+      },
+      share: {}
+    })
+  }
+  return global.yInstances[room]
+}
+
 
 const { ExpressPeerServer } = require("peer");
 const peerServer = ExpressPeerServer(server, {

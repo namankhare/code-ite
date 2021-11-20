@@ -7,7 +7,7 @@ import Whiteboard from '../components/Whiteboard'
 import "../assets/css/Editor.css";
 import { disconnectSocket, subscribeToChat } from '../socketio.service'
 import { Split } from '@geoffcox/react-splitter';
-import Output from '../components/Output'
+// import Output from '../components/Output'
 import Input from '../components/Input'
 
 
@@ -24,11 +24,11 @@ const Editor = () => {
         return savedName
     }
     useEffect(() => {
-
         subscribeToChat(room, randomUser())
         return () => {
             disconnectSocket();
         }
+        // eslint-disable-next-line
     }, []);
     return (
         <>

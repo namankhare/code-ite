@@ -4,7 +4,7 @@ import Editor from "@monaco-editor/react";
 import { ClockLoader as Loader } from "react-spinners";
 import { initiateSocketConnection, recieveSync, sendSync } from '../socketio.service';
 import "../assets/css/Toggle.css";
-
+//
 
 
 // loader.init().then(monaco => {
@@ -22,7 +22,10 @@ import "../assets/css/Toggle.css";
 // });
 
 const IDE = () => {
+    //
 
+
+    //
 
     const [ideCode, setIdeCode] = useState("console.log('code-ite')")
     function handleEditorDidMount(editor) {
@@ -89,7 +92,3 @@ const IDE = () => {
 export default IDE
 
 
-{/* <div className="form-check form-switch mt-2">
-<input className="form-check-input" type="checkbox" id="flexSwitchCheckDefault" style={{}} />
-
-</div> */}
