@@ -243,10 +243,10 @@ const Whiteboard = () => {
                         <button className="btn btn-outline-dark px-3 py-1 text-nowrap mx-1" id="btnn" style={{ "border": "1px solid black", "fontSize": "10px", "boxShadow": "none" }}
                             onClick={() => (Clear())}>Clear
                         </button>
-                        {/* 
+
                         <img src={Pencil} alt="" style={{ "width": "3%" }} />
-                        <img src={Eraser} alt="" style={{ "width": "3%" }} /> */}
-                        {/* <img src={Clear} alt="" style={{ "width": "3%" }} /> */}
+                        <img src={Eraser} alt="" style={{ "width": "3%" }} />
+                        <img src={Clear} alt="" style={{ "width": "3%" }} />
 
                     </div>
                 </div>
