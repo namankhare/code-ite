@@ -5,11 +5,11 @@
   /* position: absolute; */
 }
 .color {
-  display: inline-block;
   height: 17px;
   width: 17px;
   border-radius: 12px;
   margin: 2px 4px;
+  padding: 10px;
 }
 
 .color.black {
@@ -36,4 +36,13 @@
   padding: 0; */
   width: 100%;
   height: 60vh;
+}
+
+.whiteboard.eraserCursor {
+  /* cursor: url("../svg/Eraser-Cursor.png"), auto; */
+  cursor: wait;
+}
+.whiteboard.pencilCursor {
+  /* cursor: url("../svg/Eraser-Cursor.png"), auto; */
+  cursor: crosshair;
 }
