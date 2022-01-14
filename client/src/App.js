@@ -5,22 +5,22 @@ import Login from "./core/Login";
 import Signup from "./core/Signup";
 import Editor from "./core/Editor";
 import { v4 as uuidv4 } from 'uuid';
-
+import ContextProvider from "./hooks/GlobalState";
 
 function App() {
-
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/join" element={<Navigate replace to={`/room/${uuidv4()}`} />} />
-        <Route path="/room" element={<Navigate replace to="/" />} />
-        <Route path="/room/:room" element={<Editor />} />
-
-      </Routes>
-    </Router>
+    <ContextProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/join" element={<Navigate replace to={`/room/${uuidv4()}`} />} />
+          <Route path="/room" element={<Navigate replace to="/" />} />
+          <Route path="/room/:room" element={<Editor />} />
+        </Routes>
+      </Router>
+    </ContextProvider>
   );
 }
 

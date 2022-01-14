@@ -14,9 +14,6 @@ const Whiteboard = () => {
 
     const [isPencilCursor, setIsPencilCursor] = useState(true)
 
-
-    // const socketRef = useRef();
-
     // Clear Whiteboard
     const Clear = () => {
 
@@ -89,7 +86,6 @@ const Whiteboard = () => {
         // ---------------- mouse movement --------------------------------------
 
         const onMouseDown = (e) => {
-            // console.log("onMouseDown", canvasRef.current.classList[1]);
             e.preventDefault()
             const customLeft = canvasRef.current.offsetLeft
             const customTop = canvasRef.current.offsetTop
@@ -100,7 +96,6 @@ const Whiteboard = () => {
             if (canvas.classList[1] === "pencilCursor") {
                 drawing = true;
                 useEraser = false;
-
                 //final
                 drawLine(current.x, current.y, eClientX || parseInt(e.touches[0].pageX - (customLeft)), eClientY || parseInt((e.touches[0].pageY) - (customTop)), current.color, true);
             } else if (canvas.classList[1] === "eraserCursor") {
@@ -115,7 +110,6 @@ const Whiteboard = () => {
 
         const onMouseMove = (e) => {
             e.preventDefault()
-            // console.log("onMouseMove", canvas.classList[1]);
             if (canvas.classList[1] === "pencilCursor") {
                 if (!drawing) { return; }
 
@@ -125,9 +119,7 @@ const Whiteboard = () => {
                 const eClientX = parseInt((e.pageX) - (customLeft))
                 const eClientY = parseInt((e.pageY) - (customTop))
                 //final
-
                 drawLine(current.x, current.y, eClientX || parseInt(e.touches[0].pageX - (customLeft)), eClientY || parseInt((e.touches[0].pageY) - (customTop)), current.color, true);
-
 
                 current.x = eClientX || parseInt(e.touches[0].pageX - (customLeft));
                 current.y = eClientY || parseInt((e.touches[0].pageY) - (customTop));
@@ -182,21 +174,6 @@ const Whiteboard = () => {
         canvas.addEventListener('touchcancel', onMouseUp, false);
         canvas.addEventListener('touchmove', throttle(onMouseMove, 10), false);
 
-
-
-        // ----------------------- socket.io connection ----------------------------
-        // const onDrawingEvent = (data) => {
-        //     const w = canvas.width;
-        //     const h = canvas.height;
-        //     drawLine(data.x0 * w, data.y0 * h, data.x1 * w, data.y1 * h, data.color);
-        // }
-
-        // socketRef.current = io.connect('/');
-        // socketRef.current.on('drawing', onDrawingEvent);
-
-        // const clear = () => {
-        //     context.clearRect(0, 0, canvas.width, canvas.height)
-        // }
     }, []);
 
 
@@ -223,14 +200,22 @@ const Whiteboard = () => {
                 {/* canvas */}
                 <ResizeObserver onResize={() => {
                     const canvas = canvasRef.current;
+                    let data = canvas.toDataURL(); // save current image
+                    //changing height and weight after resizing
                     canvas.width = canvasRef.current.offsetWidth;
                     canvas.height = canvasRef.current.offsetHeight;
+                    const context = canvas.getContext('2d');
+                    let img = new Image();
+                    img.onload = function () {
+                        context.drawImage(img, 0, 0, img.width, img.height); //redraw on resize
+                    }
+                    img.src = data;
                 }}
                 >
                     <canvas ref={canvasRef} className={`${isPencilCursor ? "whiteboard pencilCursor" : "whiteboard eraserCursor"}`} />
                 </ResizeObserver>
 
-                <div className=""><Output /></div>
+                <div ><Output /></div>
             </div>
         </>
     )

@@ -15,15 +15,15 @@ export const disconnectSocket = () => {
 }
 
 export const subscribeToChat = (room, ranUser) => {
-    socket.emit("join-room", room, ranUser);
+    // socket.emit("join-room", room, ranUser);
 }
 export const sendSync = (cb) => {
     // console.log(cb)
-    socket.emit('message', cb);
+    // socket.emit('message', cb);
 }
 export const recieveSync = (cb) => {
     // console.log(cb)
-    socket.on('createMessage', msg => {
-        return cb(null, msg);
-    });
+    // socket.on('createMessage', msg => {
+    // return cb(null, msg);
+    // });
 }

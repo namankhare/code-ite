@@ -1,27 +1,27 @@
 import React from 'react'
-import "../assets/css/Signup.css";
+import "../assets/css/Login.css";
 import LoginPoster from "../assets/svg/Login-poster.svg";
 import backArrow from "../assets/svg/backArrow.svg";
 import { Link } from "react-router-dom";
 
 const Signup = () => {
   return (
-    <div className="wrapper">
-      <nav>
+    <div className="p-0 m-0">
+      <nav className="d-flex justify-content-between" style={{ "padding": "25px 50px" }}>
         <Link style={{ "width": "50px" }} to="/">
-          <img src={backArrow} alt="arrow" className="backArrow" />
+          <img src={backArrow} alt="arrow" className="backArrow" style={{ "width": "20px" }} />
         </Link>
         <h3>{"<Code-ite />"}</h3>
       </nav>
-      <div className="login-container container-fluid">
-        <div className="left">
+      <div className="container-fluid d-flex p-0 m-0">
+        <div className="leftSec">
           <form className="LoginForm">
             <h1>Sign Up</h1>
-            <div className="form-group-1">
+            <div className="form-group-1" style={{ "padding": "25px 0 5px 0" }}>
               <label htmlFor="exampleInputEmail1" >Enter Username</label>
               <input type="text" className="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
             </div>
-            <div className="form-group-2">
+            <div className="form-group-2" style={{ "padding": "5px 0 10px 0" }}>
               <label htmlFor="exampleInputEmail1" >Email address</label>
               <input
                 type="email"
@@ -32,7 +32,7 @@ const Signup = () => {
               // ref={email}
               />
             </div>
-            <div className="form-group-2">
+            <div className="form-group-2" style={{ "padding": "5px 0 10px 0" }}>
               <label htmlFor="exampleInputPassword1">Create Password</label>
               <input
                 type="password"
@@ -42,22 +42,23 @@ const Signup = () => {
               // ref={password}
               />
             </div>
-            <div className="container m-3 ">
+            <div >
               <input
                 type="button"
                 onClick={() => {
                   //   loginReq();
                 }}
                 value="Sign In"
-                className="btn btn-dark m-4 px-5 py-2 login-button"
+                className="btn btn-dark m-4 ms-0 px-5 py-2 login-button"
+                style={{ borderRadius: 0 }}
               />
             </div>
             {/* <input type="button" onClick={() => { testdetails() }} /> */}
           </form>
           {/* <h3 className="alert">{login}</h3> */}
         </div>
-        <div className="right d-none d-md-none d-lg-block">
-          <img src={LoginPoster} alt="back" className="poster" />
+        <div className="justify-content-center d-none d-md-none d-lg-block">
+          <img src={LoginPoster} alt="back" width='80%' height="100%" style={{ marginLeft: '20px' }} />
         </div>
       </div>
     </div>

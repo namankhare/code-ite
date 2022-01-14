@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const Leftsec = () => {
+const LeftHeroSection = () => {
     const [joinForm, setJoinForm] = useState(false)
     const joinFormValue = useRef('default')
 
@@ -42,4 +42,4 @@ const Leftsec = () => {
     )
 }
 
-export default Leftsec
+export default LeftHeroSection

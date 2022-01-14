@@ -15,18 +15,30 @@ const Header = () => {
       <div>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid px-4">
-
-            <Link to="#" className="navbar-brand  mx-5 my-1 h5">
+            <Link to="/" className="navbar-brand  mx-5 my-1 h5">
               {"</>"}
             </Link>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent"
+              aria-controls="navbarSupportedContent"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
               <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <div
+              className="collapse navbar-collapse"
+              id="navbarSupportedContent"
+            >
               <ul className="navbar-nav me-auto mb-2 mb-lg-0 ">
                 <Link to="#">
                   <li className="nav-item">
-                    <span className="nav-link active mx-3 my-1 h5">Support</span>
+                    <span className="nav-link active mx-3 my-1 h5">
+                      Support
+                    </span>
                   </li>
                 </Link>
                 <Link to="#">
@@ -34,7 +46,6 @@ const Header = () => {
                     <span className="nav-link mx-3 my-1 h5">About</span>
                   </li>
                 </Link>
-
               </ul>
               <form className="d-flex">
                 <Link to="/login">
@@ -55,7 +66,6 @@ const Header = () => {
                     Sign Up
                   </button>
                 </Link>
-
               </form>
             </div>
           </div>
