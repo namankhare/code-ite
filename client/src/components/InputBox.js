@@ -1,5 +1,5 @@
 import React, { useContext, useRef } from 'react'
-import { editorDetailsContext } from '../hooks/GlobalState';
+import { editorDetailsContext } from '../context/GlobalContext';
 const Input = () => {
 
     const { setEditorData } = useContext(editorDetailsContext)
@@ -12,8 +12,7 @@ const Input = () => {
 
                 <button
                     type="button"
-                    className="btn btn-outline-dark px-3 py-1 text-nowrap"
-                    id="btnn"
+                    className="btn btn-outline-dark px-3 py-1 text-nowrap rounded-0"
                     style={{ "border": "1px solid black", "fontSize": "10px", "boxShadow": "none" }}
                 >
                     Clear

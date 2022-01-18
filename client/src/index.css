@@ -8,7 +8,7 @@ body {
   font-family: "Poppins", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 a {
   text-decoration: none;
@@ -19,49 +19,6 @@ a {
   padding: 15px 90px;
 }
 /*header*/
-
-/* left section*/
-
-.lefthead {
-  font-size: 80px;
-  font-weight: 600;
-}
-
-.description {
-  font-size: 18px;
-  margin: 10px 10px 20px 10px;
-}
-
-.wishes {
-  font-size: 23px;
-  margin: 20px 10px;
-  font-weight: 500;
-}
-
-.btn-wrapper {
-  margin: 20px 10px;
-}
-
-#btnn {
-  border-radius: 0;
-}
-
-/* left section*/
-
-/*footer*/
-
-.footer {
-  font-size: 30px;
-  display: flex;
-  justify-content: flex-start;
-  margin: 20px 10px;
-  padding: 0px 20px;
-}
-/* .github-icon {
-  margin-left: 10px;
-} */
-
-/*footer*/
 
 /*Editor component*/
 
@@ -77,3 +34,9 @@ a {
   padding: 10px;
 }
 /*Editor component*/
+
+@media screen and (max-width: 768px) {
+  .split-container.vertical {
+    display: block !important;
+  }
+}

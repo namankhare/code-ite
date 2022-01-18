@@ -2,7 +2,6 @@ const express = require('express')
 const { v4: uuidv4 } = require('uuid');
 //
 const roomRouter = express.Router()
-const pool = require('../config/db')
 
 roomRouter.route('/')
     .all((req, res, next) => {

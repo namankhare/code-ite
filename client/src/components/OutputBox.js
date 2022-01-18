@@ -8,7 +8,7 @@ const Output = () => {
                 <h5 style={{ "fontWeight": "400", "fontSize": "16px" }}>Output</h5>
                 <img src={ArrowDown} alt="" style={{ "width": "3%" }} />
             </div>
-            <textarea rows="4" cols="70" className="mt-2" id="output" style={{ "width": "100%", "fontSize": "14px" }}>
+            <textarea rows="4" cols="70" className="mt-2" id="ghgh" style={{ "width": "100%", "fontSize": "14px" }} disabled>
             </textarea>
         </div>
     )

@@ -7,8 +7,9 @@
 .form-control {
   border-radius: 0;
   border: 1px solid black;
-  width: 80%;
-  margin-right: auto;
+  /* width: 80%; */
+  /* margin-right: auto; */
+  /* max-width: 100%; */
 }
 .login-button:focus {
   box-shadow: none;
@@ -23,4 +24,12 @@
 .alert {
   text-align: center;
   font-size: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .leftSec {
+    padding: 0;
+    width: 80%;
+    margin: 30px auto;
+  }
 }

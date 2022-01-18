@@ -1,10 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import axios from "axios";
 import { API } from "../backend";
 import "../assets/css/Login.css";
 import backArrow from "../assets/svg/backArrow.svg";
 import poster from "../assets/svg/poster.svg";
 import { Link } from "react-router-dom";
+import { loginState } from "../context/GlobalContext";
+
 
 
 const Login = () => {
@@ -12,6 +14,8 @@ const Login = () => {
   const password = useRef("");
 
   const [login, setLogin] = useState(""); // not login
+
+  const setCurrentLogin = useContext(loginState)
 
   // const testdetails = () => {
   //     console.log(email.current.value)
@@ -29,9 +33,12 @@ const Login = () => {
       .then(function (response) {
         console.log(response);
         setLogin(response.data.data[0].name);
+        setCurrentLogin(true);
+        // console.log(currentLogin);
       })
       .catch(function (error) {
         console.log(error);
+
         setLogin("Invalid Username or Password.")
       });
   };
@@ -45,11 +52,11 @@ const Login = () => {
         <h3>{"<Code-ite />"}</h3>
       </nav>
       <div className="container-fluid d-flex p-0 m-0">
-        <div className="leftSec">
+        <div className="leftSec ">
           <form className="LoginForm" style={{ "paddingTop": "30px" }}>
             <h1 className=" fs-2">Login</h1>
             <div className="form-group-1" style={{ "padding": "25px 0 5px 0" }}>
-              <label htmlFor="exampleInputEmail1" className="py-2" style={{ "paddingLeft": "45px", "marginLeft": 0 }} >Email address</label>
+              <label htmlFor="exampleInputEmail1" className="py-2"  >Email address</label>
               <input
                 type="email"
                 className="form-control"
@@ -84,7 +91,7 @@ const Login = () => {
           </form>
           <h3 className="alert">{login}</h3>
         </div>
-        <div className="justify-content-center d-none d-md-none d-lg-block">
+        <div className="justify-content-center d-none d-md-block">
           <img src={poster} alt="back" width='80%' height='100%' style={{ marginLeft: '20px' }} />
         </div>
       </div >

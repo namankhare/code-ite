@@ -3,65 +3,143 @@ import Editor from "@monaco-editor/react";
 import { ClockLoader as Loader } from "react-spinners";
 import "../assets/css/Toggle.css";
 import { useParams } from "react-router-dom";
-import MonacoConvergenceAdapter from "../adapters/MonacoAdapter";
-import { editorDetailsContext } from "../hooks/GlobalState";
+import { editorDetailsContext } from "../context/GlobalContext";
+
 import { API } from "../backend";
 import axios from 'axios';
-import { initiateConvergenceConnection } from "../convergence.service";
+import { io } from 'socket.io-client';
 
 const IDE = () => {
     //
-    const [ideCode, setIdeCode] = useState("default-value");
+    const [ideCode] = useState("text");
     const editorRef = useRef("");
+    const monacoRef = useRef("");
     const { room } = useParams();
     const langRef = useRef("")
-    const codeRef = useRef("")
 
-    // UseContext
     const { editorData, setEditorData } = useContext(editorDetailsContext);
-    // const setEditorData = useContext(editorDetailsContext)
-    // console.log(editorData)
-
-    // const CONVERGENCE_URL =
-    //     "ws://localhost:8000/api/realtime/convergence/default";
+    let isadmin = useRef(false);
+    let isWorkingData = useRef(false)
+    var users = {}  //user
+    var contentWidgets = {} //save monaco editor name contentWidgets - 
+    const workingData = useRef("")
+    let issocket = useRef(false)
 
     function randomDisplayName() {
         return Math.round(Math.random() * 1000);
     }
-    const oldText = useRef("");
-    const username = randomDisplayName()
-
+    let socket;
+    socket = io(API);
     useEffect(() => {
-        const connectionModel = initiateConvergenceConnection(room, username)
-        connectionModel.then((model) => {
-            const adapter = new MonacoConvergenceAdapter(
-                editorRef.current,
-                model.elementAt("text")
-            );
-            oldText.current = model.elementAt("text").value();
-            setIdeCode(oldText.current);
-            adapter.bind();
+        let username = randomDisplayName()
+        console.log(`Connecting socket...`, username);
+        socket.emit("join-room", room, username);
+        socket.on('admin', function (data) {    //admin Event  
+            console.log("mai admin")
+            isadmin.current = true
+            console.log(isadmin.current)
         })
-            .catch((error) => {
-                console.error("Could not open model ", error);
-            });
-    }, [ideCode, room, username]);
+        //
+        socket.on('userdata', function (data) {     //Connected Client Status Event
+            console.log("userdata: ", data)
+            if (data.length === 1)
+                isadmin.current = true
+            for (var i of data) {
+                users[i.user] = i.color
+                insertWidget(i)
+            }
+        })
+        //
 
-    function handleEditorDidMount(editor) {
-        console.log("after mounted: ", oldText.current);
-        editorRef.current = editor;
+        socket.on('resetdata', function (data) {    //get Default Editor Value
+            console.log("called");
+            workingData.current = data;
+            isWorkingData.current = true
+        })
 
-        editor.focus();
-    }
-    const onChange = (newValue, e) => {
-        // setEditorData({ code: newValue });
-    };
+
+
+        return () => {
+            if (socket) socket.disconnect();
+        }
+
+    }, [])
 
     //before editor mount
     function handleEditorWillMount(monaco) {
-        setIdeCode(oldText.current);
-        console.log("before mounted: ", oldText.current);
+        // console.log(monaco.editor)
+        monacoRef.current = monaco.editor
+
     }
+
+    function handleEditorDidMount(editor) {
+        editorRef.current = editor; //save ref for later use
+        editor.onDidChangeModelContent(function (e) { //Text Change
+            if (issocket.current === false) {
+                socket.emit('key', e)
+            } else {
+                issocket.current = false
+            }
+        })
+        socket.on('key', function (data) {  //Change Content Event
+            issocket.current = true
+            changeText(data, editor)
+        })
+        editor.onDidChangeCursorSelection(function (e) {    //Cursor or Selection Change
+            socket.emit('selection', e)
+        })
+
+        socket.on('connected', function (data) { //Connect New Client Event
+            console.log("connected: ", data)
+            users[data.user] = data.color
+            insertWidget(data)
+            socket.emit("filedata", editor.getValue())
+
+        })
+        if (isWorkingData.current) {
+            issocket.current = true
+            editor.setValue(workingData.current);
+            issocket.current = false
+        }
+
+        editor.focus();
+    }
+    function changeText(e, editor) {
+        editor.getModel().applyEdits(e.changes) //change Content
+    }
+
+    function insertWidget(e) {
+        contentWidgets[e.user] = {
+            domNode: null,
+            position: {
+                lineNumber: 0,
+                column: 0
+            },
+            getId: function () {
+                return 'content.' + e.user
+            },
+            getDomNode: function () {
+                if (!this.domNode) {
+                    this.domNode = document.createElement('div')
+                    this.domNode.innerHTML = e.user
+                    this.domNode.style.background = e.color
+                    this.domNode.style.color = 'black'
+                    this.domNode.style.opacity = 1
+                    this.domNode.style.width = 'max-content'
+                }
+                return this.domNode
+            },
+            getPosition: function () {
+                console.log("thispositio", this.position)
+                return {
+
+                    position: this.position,
+                    preference: [monacoRef.current.ContentWidgetPositionPreference.ABOVE, monacoRef.current.ContentWidgetPositionPreference.BELOW]
+                }
+            }
+        }
+    }
+
 
     const sendCode = () => {
         console.log(langRef.current.value)
@@ -84,7 +162,7 @@ const IDE = () => {
             .then((response) => {
 
                 var response3 = decodeURIComponent(escape(window.atob(response.data)))
-                document.getElementById('output').value = response3
+                document.getElementById('outputCode').value = response3
                 console.log(response3);
             }).catch((err) => {
                 console.log(err);
@@ -125,8 +203,7 @@ const IDE = () => {
                     </div>
                     <button
                         type="button"
-                        className="btn btn-outline-dark px-3 py-1 text-nowrap  mx-1"
-                        id="btnn"
+                        className="btn btn-outline-dark px-3 py-1 text-nowrap  mx-1 rounded-0"
                         style={{
                             border: "1px solid black",
                             fontSize: "14px",
@@ -147,13 +224,11 @@ const IDE = () => {
                 <Editor
                     height="90vh"
                     theme="vs"
-                    language="c"
-                    loading={<Loader />}
-                    onChange={onChange}
-                    defaultValue={ideCode}
-                    // onValidate={onChange}
+                    language="javascript"
                     beforeMount={handleEditorWillMount}
                     onMount={handleEditorDidMount}
+                    defaultValue={ideCode}
+                    loading={<Loader />}
                 />
             </div>
         </>

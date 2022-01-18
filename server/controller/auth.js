@@ -5,3 +5,9 @@ exports.isSignedIn = expressJwt({
     algorithms: ['HS256'],
     userProperty: "auth"
 })
+
+exports.isValidRefreshToken = expressJwt({
+    secret: process.env.REFRESHSECRET,
+    algorithms: ['HS256'],
+    userProperty: "auth"
+})

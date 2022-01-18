@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react'
-import Output from '../components/Output'
+
 import ResizeObserver from 'rc-resize-observer';
 import '../assets/css/Wb.css'
 import Pencil from "../assets/svg/Pencil.svg";
@@ -214,8 +214,8 @@ const Whiteboard = () => {
                 >
                     <canvas ref={canvasRef} className={`${isPencilCursor ? "whiteboard pencilCursor" : "whiteboard eraserCursor"}`} />
                 </ResizeObserver>
-
-                <div ><Output /></div>
+                {/* 
+                <div ><Output /></div> */}
             </div>
         </>
     )
