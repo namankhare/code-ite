@@ -49,11 +49,11 @@ const Header = () => {
               </ul>
               {/* collab icons */}
               <CollaborationIcons />
-              <form className="d-flex">
-                <Link to="/login">
+              <form className="d-flex ">
+                <Link to="/login" className="me-4 ">
                   <button
                     type="button"
-                    className="btn btn-outline-dark text-nowrap px-4 py-2 mx-4 rounded-0"
+                    className="btn btn-outline-dark text-nowrap px-4  py-2 rounded-0"
                   >
                     Login
                   </button>
@@ -61,7 +61,7 @@ const Header = () => {
                 <Link to="/signup">
                   <button
                     type="button"
-                    className="btn btn-dark px-4 py-2 text-nowrap mx-1 rounded-0"
+                    className="btn btn-dark text-nowrap px-4  py-2    rounded-0"
                   >
                     Sign Up
                   </button>

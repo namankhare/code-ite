@@ -1,7 +1,6 @@
 import React, { useRef, useState, useContext } from "react";
 import axios from "axios";
 import { API } from "../backend";
-import "../assets/css/Login.css";
 import backArrow from "../assets/svg/backArrow.svg";
 import poster from "../assets/svg/poster.svg";
 import { Link } from "react-router-dom";
@@ -51,31 +50,34 @@ const Login = () => {
         </Link>
         <h3>{"<Code-ite />"}</h3>
       </nav>
-      <div className="container-fluid d-flex p-0 m-0">
-        <div className="leftSec ">
+      <div className="container">
+      <div className="container-fluid d-flex pt-4 mt-4" >
+        <div className="px- mx-5 pt-5" style={{ "width": "60%" }}>
           <form className="LoginForm" style={{ "paddingTop": "30px" }}>
             <h1 className=" fs-2">Login</h1>
-            <div className="form-group-1" style={{ "padding": "25px 0 5px 0" }}>
-              <label htmlFor="exampleInputEmail1" className="py-2"  >Email address</label>
+            <div className="mb-3 " >
+              <label htmlFor="InputEmail" className="no-textwrap py-2"  >Email address</label>
               <input
                 type="email"
-                className="form-control"
-                id="exampleInputEmail1"
+                className="form-control mt-1 py-2 rounded-0  shadow bg-body rounded"
+                id="InputEmail"
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
                 ref={email}
               />
             </div>
-            <div className="form-group-2" style={{ "padding": "5px 0 10px 0" }}>
-              <label htmlFor="exampleInputPassword1">Password</label>
+            <div className="mb-4 " >
+              <label htmlFor="InputPassword" className="no-textwrap py-2"  >Password</label>
               <input
                 type="password"
-                className="form-control"
-                id="exampleInputPassword1"
+                className="form-control mt-1 py-2 rounded-0 shadow bg-body rounded"
+                id="InputPassword"
+                aria-describedby="passwordHelp"
                 placeholder="Password"
                 ref={password}
               />
             </div>
+            
             <div className="rightSec justify-content-start" >
               <input
                 type="button"
@@ -83,19 +85,19 @@ const Login = () => {
                   loginReq();
                 }}
                 value="Login"
-                className="btn btn-dark m-4 ms-0 px-5 py-2 login-button"
+                className=" btn btn-dark m-4 ms-0 px-5 py-2 "
                 style={{ borderRadius: 0 }}
               />
             </div>
-            {/* <input type="button" onClick={() => { testdetails() }} /> */}
           </form>
-          <h3 className="alert">{login}</h3>
+          <h3 className=" fs-6 text-center ">{login}</h3>
         </div>
-        <div className="justify-content-center d-none d-md-block">
+        <div className="justify-content-center d-none d-md-block mx-5 px-5 pt-5">
           <img src={poster} alt="back" width='80%' height='100%' style={{ marginLeft: '20px' }} />
         </div>
       </div >
     </div >
+    </div>
   );
 };
 
