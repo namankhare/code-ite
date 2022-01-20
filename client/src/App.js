@@ -13,11 +13,11 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/join" element={<Navigate replace to={`/room/${uuidv4()}`} />} />
-          <Route path="/room" element={<Navigate replace to="/" />} />
-          <Route path="/room/:room" element={<Editor />} />
+          <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
+          <Route path="join" element={<Navigate replace to={`/room/${uuidv4()}`} />} />
+          <Route path="room" element={<Navigate replace to="/" />} />
+          <Route path="room/:room" element={<Editor />} />
         </Routes>
       </Router>
     </ContextProvider>

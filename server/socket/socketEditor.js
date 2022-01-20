@@ -50,8 +50,9 @@ module.exports = function (io, nsp) {
             })
             socket.on('disconnect', function (data) {   //Client Disconnected
                 console.log('[Socket.IO] [' + nsp + '] : disConnect ' + socket.id) //print disconnect
-                socket.broadcast.to(roomId).emit("exit", users[socket.id].user)    //Alert Exit Connect
+                socket.broadcast.to(roomId).emit("exit", users[socket.id].user);   //Alert Exit Connect
                 delete users[socket.id] //delete from Server
+                io.sockets.in(roomId).emit('userdata', Object.values(users))   //Alert Exit Connect
             })
             socket.on('key', function (data) {      //Change Content Event
                 data.user = socket.user

@@ -8,51 +8,79 @@ import { editorDetailsContext } from "../context/GlobalContext";
 import { API } from "../backend";
 import axios from 'axios';
 import { io } from 'socket.io-client';
+import ExampleCode from "../helper/ExampleCode";
+
+
 
 const IDE = () => {
     //
-    const [ideCode] = useState("text");
+    const [ideCode] = useState("#include <stdio.h>int main(){printf('aasd');}");
     const editorRef = useRef("");
     const monacoRef = useRef("");
     const { room } = useParams();
     const langRef = useRef("")
 
-    const { editorData, setEditorData } = useContext(editorDetailsContext);
     let isadmin = useRef(false);
     let isWorkingData = useRef(false)
-    var users = {}  //user
-    var contentWidgets = {} //save monaco editor name contentWidgets - 
+    var users = {}
+    // const users = useMemo(() => [], []);
+    var contentWidgets = {}
     const workingData = useRef("")
     let issocket = useRef(false)
 
+    //Global Context
+    const { editorData, setEditorData } = useContext(editorDetailsContext);
+    const { setCollabIcons } = useContext(editorDetailsContext);
+    // const { myUsername } = useContext(editorDetailsContext); //using localstorage instead
+
+
     function randomDisplayName() {
-        return Math.round(Math.random() * 1000);
+        return Math.round(Math.random() * 10000);
     }
     let socket;
     socket = io(API);
     useEffect(() => {
-        let username = randomDisplayName()
-        console.log(`Connecting socket...`, username);
-        socket.emit("join-room", room, username);
+        const username = () => {
+            if (localStorage.getItem('language')) {
+                langRef.current.value = localStorage.getItem('language')
+            }
+            if (!localStorage.getItem('Username')) {
+                let newUsername = randomDisplayName()
+                localStorage.setItem('Username', newUsername);
+                return newUsername
+            } else {
+                let fetchUsername = localStorage.getItem('Username')
+                return fetchUsername
+            }
+        }
+        // myUsername.current = username()
+        console.log(`Connecting socket...`, username());
+        socket.emit("join-room", room, username());
         socket.on('admin', function (data) {    //admin Event  
-            console.log("mai admin")
+            console.log("Admin initiated")
             isadmin.current = true
-            console.log(isadmin.current)
         })
         //
         socket.on('userdata', function (data) {     //Connected Client Status Event
-            console.log("userdata: ", data)
+            // console.log("userdata: ", data)
+            // var uniqueUserData = [];
+            var filtered = data.filter(function ({ user }) {
+                var key = `${user}`;
+                return !this.has(key) && this.add(key);
+            }, new Set());
+
             if (data.length === 1)
                 isadmin.current = true
             for (var i of data) {
                 users[i.user] = i.color
                 insertWidget(i)
             }
+            setCollabIcons(filtered)
         })
         //
 
         socket.on('resetdata', function (data) {    //get Default Editor Value
-            console.log("called");
+            // console.log("called", data);
             workingData.current = data;
             isWorkingData.current = true
         })
@@ -62,7 +90,7 @@ const IDE = () => {
         return () => {
             if (socket) socket.disconnect();
         }
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     //before editor mount
@@ -90,7 +118,7 @@ const IDE = () => {
         })
 
         socket.on('connected', function (data) { //Connect New Client Event
-            console.log("connected: ", data)
+            // console.log("connected: ", data)
             users[data.user] = data.color
             insertWidget(data)
             socket.emit("filedata", editor.getValue())
@@ -142,10 +170,10 @@ const IDE = () => {
 
 
     const sendCode = () => {
-        console.log(langRef.current.value)
-        let encodedCode = window.btoa(unescape(encodeURIComponent(editorData.code)))
-        let encodedArgs = window.btoa(unescape(encodeURIComponent(editorData.args)))
-        let encodedLang = window.btoa(unescape(encodeURIComponent(langRef.current.value)))
+        console.log(editorData.args)
+        let encodedCode = btoa(editorRef.current.getValue())
+        let encodedArgs = btoa(editorData.args)
+        let encodedLang = btoa(langRef.current.value)
 
         const params = new URLSearchParams()
         params.append('code', encodedCode)
@@ -161,7 +189,7 @@ const IDE = () => {
             .post(`${API}/code`, params, config)
             .then((response) => {
 
-                var response3 = decodeURIComponent(escape(window.atob(response.data)))
+                var response3 = atob(response.data)
                 document.getElementById('outputCode').value = response3
                 console.log(response3);
             }).catch((err) => {
@@ -192,12 +220,13 @@ const IDE = () => {
                             ref={langRef}
                             onChange={() => {
                                 setEditorData({ lang: langRef.current.value });
+                                localStorage.setItem('language', langRef.current.value);
                             }}
                         >
                             <option value="0">Language</option>
                             <option value="cpp">C++</option>
                             <option value="c">C</option>
-                            <option value="js">JavaScript</option>
+                            {/* <option value="javascript">JavaScript</option> */}
                             <option value="java">Java</option>
                         </select>
                     </div>
@@ -224,10 +253,10 @@ const IDE = () => {
                 <Editor
                     height="90vh"
                     theme="vs"
-                    language="javascript"
+                    language={langRef.current.value}
                     beforeMount={handleEditorWillMount}
                     onMount={handleEditorDidMount}
-                    defaultValue={ideCode}
+                    value={ExampleCode[langRef.current.value]}
                     loading={<Loader />}
                 />
             </div>
