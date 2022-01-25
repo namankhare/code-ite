@@ -4,10 +4,9 @@ import ResizeObserver from 'rc-resize-observer';
 import '../assets/css/Wb.css'
 import Pencil from "../assets/svg/Pencil.svg";
 import Eraser from "../assets/svg/Eraser.svg";
-import ClearImg from "../assets/svg/Clear.svg";
+import ClearImg from "../assets/svg/Clear.svg"; 
 
-
-const Whiteboard = () => {
+const Whiteboard = ({socket}) => {
     const canvasRef = useRef(null);
     const canvasSize = useRef("");
     const colorsRef = useRef(null);
@@ -29,6 +28,7 @@ const Whiteboard = () => {
     }
 
     useEffect(() => {
+        
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         const colors = document.getElementsByClassName('color');
@@ -60,16 +60,16 @@ const Whiteboard = () => {
             context.closePath();
 
             if (!emit) { return; }
-            // const w = canvas.width;
-            // const h = canvas.height;
-
-            // socketRef.current.emit('drawing', {
-            //     x0: x0 / w,
-            //     y0: y0 / h,
-            //     x1: x1 / w,
-            //     y1: y1 / h,
-            //     color,
-            // });
+            let data = canvas.toDataURL(); // save current image
+            let img = new Image();
+            img.onload = function () {
+                context.drawImage(img, 0, 0, img.width, img.height); //redraw on resize
+            }
+ 
+            socket.emit('whiteboard', data);
+            socket.on('whiteboard', function (data) { //Connect New Client Event
+                img.src = data;
+            })
         };
         const eraseLine = (x0, y0, x1, y1, color) => {
             context.globalCompositeOperation = "destination-out";

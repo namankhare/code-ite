@@ -47,8 +47,8 @@ const io = require("socket.io")(server, {
 var editorSocket = require('./socket/socketEditor')(io, '/');
 
 
-server.listen(process.env.PORT || 5000, () => {
-  console.log(`http://localhost:${process.env.PORT || 5000}`)
+server.listen(process.env.PORT || 5001, () => {
+  console.log(`http://localhost:${process.env.PORT || 5001}`)
 });
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useEffect, useRef, useContext } from "react";
 import Editor from "@monaco-editor/react";
 import { ClockLoader as Loader } from "react-spinners";
 import "../assets/css/Toggle.css";
@@ -7,23 +7,19 @@ import { editorDetailsContext } from "../context/GlobalContext";
 
 import { API } from "../backend";
 import axios from 'axios';
-import { io } from 'socket.io-client';
-import ExampleCode from "../helper/ExampleCode";
+import ExampleCode from "../helper/ExampleCode"; 
 
-
-
-const IDE = () => {
+const IDE = ({socket}) => {
     //
-    const [ideCode] = useState("#include <stdio.h>int main(){printf('aasd');}");
+    // const [ideCode] = useState("#include <stdio.h>int main(){printf('aasd');}");
     const editorRef = useRef("");
     const monacoRef = useRef("");
     const { room } = useParams();
     const langRef = useRef("")
 
     let isadmin = useRef(false);
-    let isWorkingData = useRef(false)
+    let isWorkingData = useRef(false);
     var users = {}
-    // const users = useMemo(() => [], []);
     var contentWidgets = {}
     const workingData = useRef("")
     let issocket = useRef(false)
@@ -31,15 +27,13 @@ const IDE = () => {
     //Global Context
     const { editorData, setEditorData } = useContext(editorDetailsContext);
     const { setCollabIcons } = useContext(editorDetailsContext);
-    // const { myUsername } = useContext(editorDetailsContext); //using localstorage instead
-
 
     function randomDisplayName() {
         return Math.round(Math.random() * 10000);
     }
-    let socket;
-    socket = io(API);
+
     useEffect(() => {
+        
         const username = () => {
             if (localStorage.getItem('language')) {
                 langRef.current.value = localStorage.getItem('language')
@@ -53,8 +47,6 @@ const IDE = () => {
                 return fetchUsername
             }
         }
-        // myUsername.current = username()
-        console.log(`Connecting socket...`, username());
         socket.emit("join-room", room, username());
         socket.on('admin', function (data) {    //admin Event  
             console.log("Admin initiated")
@@ -62,8 +54,6 @@ const IDE = () => {
         })
         //
         socket.on('userdata', function (data) {     //Connected Client Status Event
-            // console.log("userdata: ", data)
-            // var uniqueUserData = [];
             var filtered = data.filter(function ({ user }) {
                 var key = `${user}`;
                 return !this.has(key) && this.add(key);
@@ -78,15 +68,15 @@ const IDE = () => {
             setCollabIcons(filtered)
         })
         //
-
+        socket.on('outputcode', function (data) {    //get Default Editor Value
+            document.getElementById('outputCode').value = data
+        })
+        //
         socket.on('resetdata', function (data) {    //get Default Editor Value
-            // console.log("called", data);
-            workingData.current = data;
+            langRef.current.value = data[0].lang
+            workingData.current = data[0].code;
             isWorkingData.current = true
         })
-
-
-
         return () => {
             if (socket) socket.disconnect();
         }
@@ -95,7 +85,6 @@ const IDE = () => {
 
     //before editor mount
     function handleEditorWillMount(monaco) {
-        // console.log(monaco.editor)
         monacoRef.current = monaco.editor
 
     }
@@ -109,6 +98,7 @@ const IDE = () => {
                 issocket.current = false
             }
         })
+      
         socket.on('key', function (data) {  //Change Content Event
             issocket.current = true
             changeText(data, editor)
@@ -118,12 +108,15 @@ const IDE = () => {
         })
 
         socket.on('connected', function (data) { //Connect New Client Event
-            // console.log("connected: ", data)
             users[data.user] = data.color
             insertWidget(data)
-            socket.emit("filedata", editor.getValue())
-
+            let sendCurrentData = [{
+                "code": editor.getValue(),
+                "lang": langRef.current.value
+            }]
+            socket.emit("filedata", sendCurrentData)
         })
+
         if (isWorkingData.current) {
             issocket.current = true
             editor.setValue(workingData.current);
@@ -134,6 +127,7 @@ const IDE = () => {
     }
     function changeText(e, editor) {
         editor.getModel().applyEdits(e.changes) //change Content
+        
     }
 
     function insertWidget(e) {
@@ -169,9 +163,9 @@ const IDE = () => {
     }
 
 
-    const sendCode = () => {
-        console.log(editorData.args)
+    const sendCode = () => {  
         let encodedCode = btoa(editorRef.current.getValue())
+        
         let encodedArgs = btoa(editorData.args)
         let encodedLang = btoa(langRef.current.value)
 
@@ -188,14 +182,12 @@ const IDE = () => {
         axios
             .post(`${API}/code`, params, config)
             .then((response) => {
-
-                var response3 = atob(response.data)
+                var response3 = atob(response.data) 
+                socket.emit("outputcode", response3);    
                 document.getElementById('outputCode').value = response3
-                console.log(response3);
             }).catch((err) => {
-                console.log(err);
+                socket.emit("outputcode", err); 
             })
-
     }
     return (
         <>
@@ -226,7 +218,6 @@ const IDE = () => {
                             <option value="0">Language</option>
                             <option value="cpp">C++</option>
                             <option value="c">C</option>
-                            {/* <option value="javascript">JavaScript</option> */}
                             <option value="java">Java</option>
                         </select>
                     </div>

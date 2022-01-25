@@ -4,7 +4,7 @@ const { exec } = require("child_process");
 const sf = require('../js/saveFile')
 
 const cExecute = (code, args) => {
-    console.log("ye")
+    // console.log("ye")
     return new Promise((resolve, reject) => {
         sf.saveFile(inputCode, code)
             .then(() => {

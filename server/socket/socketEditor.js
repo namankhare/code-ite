@@ -45,7 +45,7 @@ module.exports = function (io, nsp) {
                 socket.broadcast.to(roomId).emit('selection', data)
             })
             socket.on('filedata', function (data) {   //File Data Event  
-                console.log("Asd", data)
+                 
                 socket.broadcast.to(roomId).emit('resetdata', data)    //Give File Data  
             })
             socket.on('disconnect', function (data) {   //Client Disconnected
@@ -55,10 +55,18 @@ module.exports = function (io, nsp) {
                 io.sockets.in(roomId).emit('userdata', Object.values(users))   //Alert Exit Connect
             })
             socket.on('key', function (data) {      //Change Content Event
-                data.user = socket.user
-                // console.log("key", data)
+ 
+                data.user = socket.user 
                 socket.broadcast.to(roomId).emit('key', data)
             })
+            socket.on("outputcode", (arg) => { 
+                io.sockets.in(roomId).emit('outputcode', arg)
+
+            });
+            socket.on('whiteboard', function (data) {    
+                socket.broadcast.to(roomId).emit('whiteboard', data);
+            })
+
         })
     })
     return server

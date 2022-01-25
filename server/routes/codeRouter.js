@@ -32,7 +32,7 @@ codeRouter.route('/')
         const code = decodeRes(req.body.code)
         const args = decodeRes(req.body.args)
         const lang = decodeRes(req.body.lang)
-        console.log(code, args, lang)
+        // console.log(code, args, lang)
 
         if (!req.body.code || !req.body.lang) {
             return res.send(encodeRes("Cannot read code"));

@@ -91,7 +91,7 @@ const Signup = () => {
                   onClick={() => {
                     signupUser()
                   }}
-                  value="Sign In"
+                  value="Sign Up"
                   className="btn btn-dark m-4 ms-0 px-5 py-2 login-button"
                   style={{ borderRadius: 0 }}
                 />

@@ -17,11 +17,11 @@ const ContextProvider = ({ children }) => {
     const [editorData, setEditorData] = useState(initialEditorData)
     const [currentLogin, setCurrentLogin] = useState(loginState)
     const [collabIcons, setCollabIcons] = useState(null)
-    const myUsername = useRef(null) //using localstorage instead
+    const socketRef = useRef(null) //using localstorage instead
 
     return (
         <editorDetailsContext.Provider
-            value={{ editorData, setEditorData, currentLogin, setCurrentLogin, collabIcons, setCollabIcons, myUsername }}
+            value={{ editorData, setEditorData, currentLogin, setCurrentLogin, collabIcons, setCollabIcons, socketRef }}
         >
             {children}
         </editorDetailsContext.Provider>
