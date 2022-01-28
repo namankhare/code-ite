@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+// import '../assets/css/LeftHeroSection.css'
 
 const LeftHeroSection = () => {
     const [joinForm, setJoinForm] = useState(false)
@@ -7,7 +8,7 @@ const LeftHeroSection = () => {
     let navigate = useNavigate();
 
     return (
-        <div className="container d-flex align-items-center" style={{ height: "80vh" }}>
+        <div id="LeftHero" className="container d-flex align-items-center" style={{ height: "100vh" }}>
             <div className="container-fluid" >
                 <div className="d-block" >
                     <h1 className="fw-bold mb-3" style={{ "fontSize": "3.4rem" }}>{"<Code-ite/>"}</h1>
