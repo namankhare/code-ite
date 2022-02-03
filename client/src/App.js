@@ -6,6 +6,9 @@ import Signup from "./core/Signup";
 import Editor from "./core/Editor";
 import { v4 as uuidv4 } from 'uuid';
 import ContextProvider from "./context/GlobalContext"
+import "../src/assets/css/DarkMode.css";
+
+
 
 
 

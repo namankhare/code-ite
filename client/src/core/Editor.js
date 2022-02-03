@@ -28,7 +28,7 @@ useEffect(() => {
             <Header />
             <div className="" >
                 <Split initialPrimarySize='60%' minPrimarySize='15%' minSecondarySize='10%' className="d-block d-md-flex flex-column">
-                    <Split horizontal initialPrimarySize="67%" minPrimarySize='20px' minSecondarySize='20px'>
+                    <Split horizontal initialPrimarySize="70%" minPrimarySize='20px' minSecondarySize='20px'>
                         <IDE socket={socket}/>
                         <Input />
                     </Split>

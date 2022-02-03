@@ -192,15 +192,15 @@ const IDE = ({socket}) => {
     return (
         <>
             <div
-                className="container-fluid IDE mx-2 "
+                className="container-fluid IDE py-2 px-2 navDark"
                 style={{ height: "80vh", width: "100%" }}
             >
-                <div className="container d-flex justify-content-between m-1 p-1">
+                <div className="container d-flex justify-content-between p-2">
                     <div className=" d-flex" style={{ paddingLeft: "0px" }}>
                         {/* <label className="form-check-label me-3 ps-0" htmlFor="flexSwitchCheckDefault">Language</label> */}
 
                         <select
-                            className="form-select"
+                            className="form-select white-dropdown"
                             style={{
                                 width: "100%",
                                 border: "1px solid black",
@@ -223,7 +223,7 @@ const IDE = ({socket}) => {
                     </div>
                     <button
                         type="button"
-                        className="btn btn-outline-dark px-3 py-1 text-nowrap  mx-1 rounded-0"
+                        className="btn btn-outline-dark px-3 py-1 text-nowrap mx-1 rounded-0 white-btn"
                         style={{
                             border: "1px solid black",
                             fontSize: "14px",
