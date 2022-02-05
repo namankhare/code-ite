@@ -1,0 +1,64 @@
+@keyframes fadeInRight {
+    from {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    to {
+      opacity: 1;
+    }
+}
+
+
+.aniket{
+    animation: fadeInRight 1s ease-in-out;
+}
+
+
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+      opacity: 1;
+    }
+}
+
+
+.suyo{
+    animation: fadeInLeft 1s ease-in-out;
+}
+
+
+
+@keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(100px);
+    }
+    to {
+      opacity: 1;
+    }
+}
+
+.naman{
+    animation: fadeInDown 1s ease-in-out;
+
+}
+
+
+@keyframes Fade {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#LeftHero{
+  animation: Fade 1s ease-in-out ;
+
+}

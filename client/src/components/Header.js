@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import CollaborationIcons from "./CollaborationIcons";
+
+
 // const currentTab = (history, path) => {
 //   if (history.location.pathname === path) {
 //     return { color: "var(--text-color)", fontWeight: "bold" }
@@ -41,7 +43,7 @@ const Header = () => {
                     </span>
                   </li>
                 </Link>
-                <Link to="#">
+                <Link to='/#about'>
                   <li className="nav-item">
                     <span className="nav-link mx-3 my-1 h5">About</span>
                   </li>
