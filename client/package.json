@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@convergence/convergence": "^1.0.0-rc.12",
     "@geoffcox/react-splitter": "^2.1.1",
     "@monaco-editor/react": "^4.3.1",
     "@testing-library/jest-dom": "^5.11.4",
@@ -16,7 +15,7 @@
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "react-spinners": "^0.11.0",
-    "socket.io-client": "^4.3.2",
+    "socket.io-client": "^4.4.1",
     "uuid": "^8.3.2",
     "web-vitals": "^1.0.1"
   },
@@ -43,9 +42,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@convergence/color-assigner": "^0.3.0",
-    "@convergencelabs/monaco-collab-ext": "^0.3.2"
   }
 }
