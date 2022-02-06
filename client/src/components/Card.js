@@ -3,7 +3,7 @@ import React from 'react';
 const Card = ({name,subHeading,desc,className}) => {
   return(
     <div className={className}>
-        <div className="container-fluid d-flex-column justify-content-center my-3">
+        <div className="container-fluid d-flex-column justify-content-center py-3 ">
             
                 <img src="https://i.pinimg.com/originals/f8/2f/ba/f82fbac7514f944aacc0257445c1f89e.jpg" className='  border border primary rounded-circle mx-auto d-block'  height="150px" width="150px" alt="" />
             

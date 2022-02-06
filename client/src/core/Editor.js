@@ -33,7 +33,7 @@ const Editor = () => {
         >
           <Split
             horizontal
-            initialPrimarySize="67%"
+            initialPrimarySize="70%"
             minPrimarySize="20px"
             minSecondarySize="20px"
           >

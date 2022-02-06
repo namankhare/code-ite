@@ -1,15 +1,19 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useContext } from "react";
 
 import ResizeObserver from "rc-resize-observer";
 import "../assets/css/Wb.css";
 import Pencil from "../assets/svg/Pencil.svg";
 import Eraser from "../assets/svg/Eraser.svg";
 import ClearImg from "../assets/svg/Clear.svg";
+import { editorDetailsContext } from "../context/GlobalContext";
 
 const Whiteboard = ({ socket }) => {
   const canvasRef = useRef(null);
   const canvasSize = useRef("");
   const colorsRef = useRef(null);
+
+  const { darkToggleRef } = useContext(editorDetailsContext);
+  const { darkMode } = useContext(editorDetailsContext);
 
   const [isPencilCursor, setIsPencilCursor] = useState(true);
   // list of all strokes drawn
@@ -60,8 +64,11 @@ const Whiteboard = ({ socket }) => {
   //redraw Canvas
   function redrawCanvas() {
     // set the canvas to the size of the window
-
-    canvasRef.current.getContext("2d").fillStyle = "#fff";
+    if (darkToggleRef.current.checked === true) {
+      canvasRef.current.getContext("2d").fillStyle = "#121212";
+    } else {
+      canvasRef.current.getContext("2d").fillStyle = "#fff";
+    }
     canvasRef.current
       .getContext("2d")
       .fillRect(
@@ -148,6 +155,16 @@ const Whiteboard = ({ socket }) => {
   };
 
   //---------------UseEffect START-------------//
+  useEffect(() => {
+    redrawCanvas();
+    if (darkMode) {
+      document.body.style.background = "#121212";
+    } else {
+      document.body.style.background = "#fff";
+    }
+    // eslint-disable-next-line
+  }, [darkMode]);
+
   useEffect(() => {
     document.oncontextmenu = function () {
       return false;
@@ -324,11 +341,6 @@ const Whiteboard = ({ socket }) => {
       const prevTouch0X = toResizeX(prevTouches[0].pageX);
       const prevTouch0Y = toResizeY(prevTouches[0].pageY);
 
-      // const scaledX = toResizeX(touch0X);
-      // const scaledY = toResizeY(touch0Y);
-      // const prevScaledX = toResizeX(prevTouch0X);
-      // const prevScaledY = toResizeY(prevTouch0Y);
-
       if (singleTouch) {
         if (canvas.classList[1] === "pencilCursor") {
           addToStroke(toTrueX(touch0X), toTrueY(touch0Y), current.color);
@@ -403,11 +415,12 @@ const Whiteboard = ({ socket }) => {
       >
         <div className="d-flex justify-content-between my-2">
           <div ref={colorsRef} className="colors d-flex">
-            <div className="color black" />
-            <div className="color red" />
-            <div className="color green" />
-            <div className="color blue" />
-            <div className="color yellow" />
+            <div className="color black shadow rounded" />
+            <div className="color red shadow rounded" />
+            <div className="color green shadow rounded" />
+            <div className="color blue shadow rounded" />
+            <div className="color yellow shadow rounded" />
+            <div className="color white shadow rounded" />
           </div>
           <div className="d-flex justify-content-end mx-2">
             <img

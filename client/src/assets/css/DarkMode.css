@@ -1,0 +1,57 @@
+:root {
+  --clr-light: #fff;
+  --clr-dark: #121212;
+  --clr-secondaryDark: #1e1e1e;
+  --clr-text: #242424;
+  --clr-secondary: #bb86fc;
+  --clr-error: #cf6679;
+  --nav-bg: #1a1a40;
+}
+
+.navDark {
+  background: var(--nav-bg) !important;
+}
+
+.PrimaryDark {
+  background: var(--clr-dark) !important;
+}
+.SecondaryDark {
+  background: var(--clr-secondaryDark) !important;
+}
+
+.textColor {
+  color: var(--clr-light) !important;
+}
+
+.white-dropdown {
+  color: var(--clr-light);
+  background: var(--clr-dark);
+  border: 1px solid var(--clr-light) !important;
+}
+
+.white-btn {
+  color: var(--clr-light);
+  background: var(--clr-dark);
+  border: 1px solid var(--clr-light) !important;
+}
+
+.white-btn:hover {
+  color: var(--clr-dark);
+  background: var(--clr-light);
+  border: 1px solid var(--clr-dark) !important;
+}
+
+.black-btn {
+  color: var(--clr-dark);
+  background: var(--clr-light);
+  border: 1px solid var(--clr-dark);
+}
+
+.black-btn:hover {
+  background-color: var(--clr-dark);
+  border: 1px solid var(--clr-light);
+}
+
+.navToggleIcon {
+  filter: invert(1) !important;
+}

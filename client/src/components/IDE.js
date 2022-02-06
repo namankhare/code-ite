@@ -26,6 +26,8 @@ const IDE = ({ socket }) => {
   //Global Context
   const { editorData, setEditorData } = useContext(editorDetailsContext);
   const { setCollabIcons } = useContext(editorDetailsContext);
+  const { darkMode, setDarkMode } = useContext(editorDetailsContext);
+  const { darkToggleRef } = useContext(editorDetailsContext);
 
   function randomDisplayName() {
     return Math.round(Math.random() * 10000);
@@ -45,6 +47,10 @@ const IDE = ({ socket }) => {
         return fetchUsername;
       }
     };
+
+    if (localStorage.getItem("mode") === "dark") {
+      darkToggleRef.current.checked = true;
+    }
 
     socket.on("connect", () => {
       console.log("connect!!");
@@ -205,18 +211,29 @@ const IDE = ({ socket }) => {
         socket.emit("outputcode", err);
       });
   };
+
+  const EditorTheme = () => {
+    if (darkToggleRef.current.checked) {
+      console.log(darkToggleRef.current.checked);
+      localStorage.setItem("mode", "dark");
+      setDarkMode(true);
+    } else {
+      localStorage.setItem("mode", "light");
+      setDarkMode(false);
+    }
+  };
   return (
     <>
       <div
-        className="container-fluid IDE mx-2 "
+        className="container-fluid IDE py-2 px-2"
         style={{ height: "80vh", width: "100%" }}
       >
-        <div className="container d-flex justify-content-between m-1 p-1">
+        <div className="container d-flex justify-content-between p-2">
           <div className=" d-flex" style={{ paddingLeft: "0px" }}>
             {/* <label className="form-check-label me-3 ps-0" htmlFor="flexSwitchCheckDefault">Language</label> */}
 
             <select
-              className="form-select"
+              className={`form-select ${darkMode ? "white-dropdown" : ""}`}
               style={{
                 width: "100%",
                 border: "1px solid black",
@@ -239,7 +256,9 @@ const IDE = ({ socket }) => {
           </div>
           <button
             type="button"
-            className="btn btn-outline-dark px-3 py-1 text-nowrap  mx-1 rounded-0"
+            className={`btn btn-outline-dark px-3 py-1 text-nowrap mx-1 rounded-0 ${
+              darkMode ? "white-btn" : ""
+            }`}
             style={{
               border: "1px solid black",
               fontSize: "14px",
@@ -253,7 +272,13 @@ const IDE = ({ socket }) => {
           </button>
 
           <label className="switch pt-2">
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              ref={darkToggleRef}
+              onChange={() => {
+                EditorTheme();
+              }}
+            />
             <span className="slider round"></span>
           </label>
         </div>
@@ -261,7 +286,7 @@ const IDE = ({ socket }) => {
 
         <Editor
           height="90vh"
-          theme="vs"
+          theme={darkMode ? "vs-dark" : "vs"}
           language={langRef.current.value}
           beforeMount={handleEditorWillMount}
           onMount={handleEditorDidMount}
