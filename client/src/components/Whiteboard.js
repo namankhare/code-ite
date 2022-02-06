@@ -195,7 +195,29 @@ const Whiteboard = ({ socket }) => {
     };
 
     const onColorUpdate = (e) => {
-      current.color = e.target.className.split(" ")[1];
+      const key = e.target.className.split(" ")[1];
+      switch (key) {
+        case "black":
+          current.color = "black";
+          break;
+        case "red":
+          current.color = "#dc3545";
+          break;
+        case "green":
+          current.color = "#28a745";
+          break;
+        case "blue":
+          current.color = "#007bff";
+          break;
+        case "yellow":
+          current.color = "#ffc107";
+          break;
+        case "white":
+          current.color = "white";
+          break;
+        default:
+          break;
+      }
     };
 
     for (let i = 0; i < colors.length; i++) {
