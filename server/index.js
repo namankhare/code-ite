@@ -14,9 +14,11 @@ pool.getConnection((err, conn) => {
     console.log("connected to db");
   }
 });
-
 //cors and parser
-app.use(cors("*"));
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,7 +34,7 @@ const io = require("socket.io")(server, {
   pingTimeout: 60000,
   upgradeTimeout: 30000,
 });
-require("./socket/socketEditor")(io, "/");
+require("./socket/socketEditorAdapter")(io);
 
 server.listen(process.env.PORT || 5001, () => {
   console.log(`http://localhost:${process.env.PORT || 5001}`);

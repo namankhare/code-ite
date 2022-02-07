@@ -19,20 +19,23 @@ authRouter.route('/login')
             else {
                 const email = req.body.email
                 const password = req.body.password
-
-                let sql = "SELECT * FROM users WHERE email ='" + email + "'AND password ='" + password + "'"
-                conn.execute(sql, (err, data) => {
+                conn.query(`SELECT * FROM users WHERE email = ? and password = ?`, [email, password], (err, data) => {
                     if (err) {
                         console.log(err);
                         res.json({ error: err });
                     }
                     else {
-                        delete data[0].password;
-                        let token = jwt.sign({ _id: data[0].id, email: data[0].email }, process.env.SECRET, { expiresIn: "30s" });
-                        res.cookie("token", token, { expire: new Date() + 9999 })
-                        const { id, name, email } = data[0]
-                        let refreshToken = jwt.sign({ _id: data[0].id }, process.env.REFRESHSECRET, { expiresIn: "7d" });
-                        return res.json({ user: { id, name, email }, token: token, refreshToken: refreshToken });
+                        if (data.length > 0) {
+                            delete data[0].password;
+                            let token = jwt.sign({ _id: data[0].id, email: data[0].email }, process.env.SECRET, { expiresIn: "10s" });
+                            res.cookie("token", token, { expire: new Date() + 9999, sameSite: true, path: '/', httpOnly: true })
+                            const { id, name, email } = data[0]
+                            let refreshToken = jwt.sign({ _id: data[0].id }, process.env.REFRESHSECRET, { expiresIn: "7d" });
+                            return res.json({ user: { id, name, email }, token: token, refreshToken: refreshToken });
+                        } else {
+                            res.status(404);
+                            res.json({ error: "Wrong Username or Password" });
+                        }
                     }
                 });
             }
@@ -60,11 +63,9 @@ authRouter.route('/signup')
                 var sql = "INSERT INTO users (`name`, `email`,`username`,`password`) VALUES ('" + name + "', '" + email + "','" + username + "','" + password + "' )";
                 conn.query(sql, (err, dataa) => {
                     if (err) {
-                        console.log(err);
                         res.json({ error: err });
                     }
                     else {
-                        console.log(dataa)
                         res.json({ data: dataa, msg: 'success' });
                     }
                 });
