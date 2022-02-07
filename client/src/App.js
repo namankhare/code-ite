@@ -14,6 +14,7 @@ import ContextProvider from "./context/GlobalContext";
 import "../src/assets/css/DarkMode.css";
 
 function App() {
+
   return (
     <ContextProvider>
       <Router>

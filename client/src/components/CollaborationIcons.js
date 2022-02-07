@@ -3,13 +3,12 @@ import { editorDetailsContext } from "../context/GlobalContext";
 
 const CollaborationIcons = () => {
     const { collabIcons } = useContext(editorDetailsContext);
-    // const { myUsername } = useContext(editorDetailsContext); //using localstorage instead
     const returnCollabs = () => {
         var total = []
         if ((collabIcons !== null) && (collabIcons !== undefined) && (collabIcons.length > 1)) {
             for (var i of collabIcons) {
-                if (localStorage.getItem('Username') !== i.user) {
-                    total.push(<span key={i.user} className="btn rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title={i.user} style={{ "height": "28px", "width": "28px", "backgroundColor": i.color }}></span>)
+                if (localStorage.getItem('Username') !== i.user && sessionStorage.getItem('name') !== i.user) {
+                    total.push(<span key={i.user} className="btn rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" title={i.user} style={{ "backgroundColor": i.color, "display": "inline" }}>{(i.user).length > 9 ? (i.user).substring(9, 10) : (i.user).substring(0, 1)}</span>)
                 }
             }
             return (total)
@@ -17,7 +16,7 @@ const CollaborationIcons = () => {
     }
 
     return (
-        <div>
+        <div className="m-2">
             {returnCollabs()}
         </div>
     )

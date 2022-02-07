@@ -1,13 +1,15 @@
 import React, { useRef } from 'react'
 import LoginPoster from "../assets/svg/Login-poster.svg";
 import backArrow from "../assets/svg/backArrow.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { API } from "../backend";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Signup = () => {
-
+  let navigate = useNavigate();
   const usernameRef = useRef("")
   const emailidRef = useRef("")
   const passwordRef = useRef("")
@@ -19,20 +21,22 @@ const Signup = () => {
     const sendEmailid = emailidRef.current.value
     const sendPassword = passwordRef.current.value
     const sendName = nameRef.current.value
-
+    const signupResponse = toast.loading("Please wait...")
     axios
-      .post(`${API}/signup`, {
+      .post(`${API}/auth/signup`, {
         email: sendEmailid,
         password: sendPassword,
         username: sendUsername,
         name: sendName
       })
       .then(function (response) {
-        console.log(response);
-
+        toast.update(signupResponse, { render: "SignUp Successful! Please Login Now😄", type: "success", isLoading: false, autoClose: 3500, theme: "dark", closeOnClick: true, draggable: true });
+        setTimeout(() => {
+          navigate('/login')
+        }, 2000);
       })
       .catch(function (error) {
-        console.log(error);
+        toast.update(signupResponse, { render: "Sorry unable to signup!", type: "error", isLoading: false, autoClose: 3500, theme: "dark", closeOnClick: true, draggable: true });
       });
 
   }
@@ -51,7 +55,7 @@ const Signup = () => {
       </nav>
       <div className="container">
         <div className="container-fluid d-flex p-0 m-0" >
-          <div className=" mx-5 pt-5"style={{ "width": "70%" }} >
+          <div className=" mx-5 pt-5" style={{ "width": "70%" }} >
             <form className="LoginForm">
               <h1>Sign Up</h1>
               <div className="form-group-1  mb-3 mt-3" >
@@ -96,16 +100,17 @@ const Signup = () => {
                   style={{ borderRadius: 0 }}
                 />
               </div>
-              
+
             </form>
           </div>
-          
-        
-        <div className="d-none d-md-block ms-5">
-          <img src={LoginPoster} alt="" width='90%' height="100%" style={{ marginLeft: '60px' }} />
+
+
+          <div className="d-none d-md-block ms-5">
+            <img src={LoginPoster} alt="" width='90%' height="100%" style={{ marginLeft: '60px' }} />
+          </div>
         </div>
       </div>
-    </div>
+      <ToastContainer pauseOnFocusLoss="false" />
     </div>
   );
 }

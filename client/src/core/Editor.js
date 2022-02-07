@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import IDE from "../components/IDE";
 import Header from "../components/Header";
 import Whiteboard from "../components/Whiteboard";
@@ -8,23 +8,25 @@ import Output from "../components/OutputBox";
 
 import { io } from "socket.io-client";
 import { API } from "../backend";
+import { editorDetailsContext } from "../context/GlobalContext";
 
 const Editor = () => {
   let socket;
   socket = io(API);
-
+  const { darkMode } = useContext(editorDetailsContext);
   useEffect(() => {
     console.log(`Connecting socket...`);
 
     return () => {
       if (socket) socket.disconnect();
     };
-  }, [socket]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <>
       <Header />
-      <div className="">
+      <div className={`${darkMode ? "PrimaryDark" : ""}`}>
         <Split
           initialPrimarySize="60%"
           minPrimarySize="15%"
@@ -42,7 +44,7 @@ const Editor = () => {
           </Split>
           <Split
             horizontal
-            initialPrimarySize="67%"
+            initialPrimarySize="70%"
             minPrimarySize="20px"
             minSecondarySize="20px"
           >

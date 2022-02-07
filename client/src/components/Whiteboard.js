@@ -17,8 +17,9 @@ const Whiteboard = ({ socket }) => {
 
   const [isPencilCursor, setIsPencilCursor] = useState(true);
   // list of all strokes drawn
-  const drawings = useRef([]);
+  const { drawings } = useContext(editorDetailsContext);
   const currentStroke = useRef([]);
+  const clrDrawing = useRef(false);
 
   const clickPencil = () => {
     setIsPencilCursor(true);
@@ -53,12 +54,9 @@ const Whiteboard = ({ socket }) => {
 
   // Clear Whiteboard
   const Clear = () => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    context.clearRect(0, 0, canvas.width, canvas.height);
     drawings.current = [];
     redrawCanvas();
-    emitStroke("clear");
+    clrDrawing.current = true;
   };
 
   //redraw Canvas
@@ -90,8 +88,9 @@ const Whiteboard = ({ socket }) => {
   // ------------------------------- create the drawing ----------------------------
   function emitStroke(type, color) {
     socket.emit("whiteboard", {
-      data: { vectors: currentStroke.current, type: type, color: color },
+      data: { vectors: currentStroke.current, type: type, color: color, empty: clrDrawing.current },
     });
+    clrDrawing.current = false
   }
   function addToStroke(x0, y0) {
     currentStroke.current.push([x0, y0]);
@@ -157,28 +156,28 @@ const Whiteboard = ({ socket }) => {
   //---------------UseEffect START-------------//
   useEffect(() => {
     redrawCanvas();
-    if (darkMode) {
-      document.body.style.background = "#121212";
-    } else {
-      document.body.style.background = "#fff";
-    }
-    // eslint-disable-next-line
+    // eslint-disable-next-line 
   }, [darkMode]);
 
   useEffect(() => {
+    socket.on("resetdata", function (data) {
+      //get Default Editor Value
+      redrawCanvas();
+    });
     document.oncontextmenu = function () {
       return false;
     };
 
     socket.on("whiteboard", function (data) {
       drawings.current.push(data.data);
+      if (data.data.empty === true) {
+        drawings.current = [];
+        redrawCanvas();
+      }
       if (data.data.type === "draw") {
         drawStroke(data.data);
       } else if (data.data.type === "eraser") {
         eraseStroke(data.data);
-      } else if (data.data.type === "clear") {
-        drawings.current = [];
-        redrawCanvas();
       }
     });
     const canvas = canvasRef.current;
@@ -474,19 +473,21 @@ const Whiteboard = ({ socket }) => {
         {/* canvas */}
         <ResizeObserver
           onResize={() => {
-            const canvas = canvasRef.current;
-            canvas.width = canvasRef.current.offsetWidth;
-            canvas.height = canvasRef.current.offsetHeight;
-            redrawCanvas();
+            //check if it is a room
+            if (window.location.pathname.split("/")[1] === 'room') {
+              const canvas = canvasRef.current;
+              canvas.width = canvasRef.current.offsetWidth;
+              canvas.height = canvasRef.current.offsetHeight;
+              redrawCanvas();
+            }
           }}
         >
           <canvas
             ref={canvasRef}
-            className={`${
-              isPencilCursor
-                ? "whiteboard pencilCursor"
-                : "whiteboard eraserCursor"
-            }`}
+            className={`${isPencilCursor
+              ? "whiteboard pencilCursor"
+              : "whiteboard eraserCursor"
+              }`}
           />
         </ResizeObserver>
       </div>

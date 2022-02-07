@@ -11,7 +11,7 @@ const Footer = () => {
               rel="noreferrer"
               target="_blank"
             >
-              view this project on github
+              View this project on Github
             </a>
           </p>
           <i className="fa-brands fa-github github-icon"></i>

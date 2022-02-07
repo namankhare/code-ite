@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useContext } from "react";
+import React, { useEffect, useRef, useContext, useState } from "react";
 import Editor from "@monaco-editor/react";
 import { ClockLoader as Loader } from "react-spinners";
 import "../assets/css/Toggle.css";
 import { useParams } from "react-router-dom";
 import { editorDetailsContext } from "../context/GlobalContext";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { API } from "../backend";
 import axios from "axios";
 import ExampleCode from "../helper/ExampleCode";
@@ -28,22 +29,25 @@ const IDE = ({ socket }) => {
   const { setCollabIcons } = useContext(editorDetailsContext);
   const { darkMode, setDarkMode } = useContext(editorDetailsContext);
   const { darkToggleRef } = useContext(editorDetailsContext);
-
+  const { drawings } = useContext(editorDetailsContext);
+  const [sendCode, setSendCode] = useState(0);
   function randomDisplayName() {
     return Math.round(Math.random() * 10000);
   }
 
   useEffect(() => {
     const username = () => {
-      if (localStorage.getItem("language")) {
-        langRef.current.value = localStorage.getItem("language");
-      }
-      if (!localStorage.getItem("Username")) {
-        let newUsername = randomDisplayName();
+      if (!sessionStorage.getItem('name') || !localStorage.getItem("Username")) {
+        let newUsername = "Anonymous" + randomDisplayName();
         localStorage.setItem("Username", newUsername);
         return newUsername;
       } else {
-        let fetchUsername = localStorage.getItem("Username");
+        let fetchUsername = '';
+        try {
+          fetchUsername = sessionStorage.getItem('name')
+        } catch (error) {
+          fetchUsername = localStorage.getItem("Username")
+        }
         return fetchUsername;
       }
     };
@@ -82,19 +86,22 @@ const IDE = ({ socket }) => {
       setCollabIcons(filtered);
     });
     //
-    socket.on("outputcode", function (data) {
-      //get Default Editor Value
-      document.getElementById("outputCode").value = data;
-    });
-    //
     socket.on("resetdata", function (data) {
       //get Default Editor Value
       langRef.current.value = data[0].lang;
       workingData.current = data[0].code;
+      drawings.current = data[0].drawing
       isWorkingData.current = true;
     });
+
+    socket.on("exit", function (data) {
+      toast.info(`${data} Left! 👎`);
+
+    });
+
+
     return () => {
-      if (socket) socket.disconnect();
+      if (socket) { socket.disconnect(); setCollabIcons(null); }
     };
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -122,17 +129,19 @@ const IDE = ({ socket }) => {
     });
     editor.onDidChangeCursorSelection(function (e) {
       //Cursor or Selection Change
-      socket.emit("selection", e);
+      // socket.emit("selection", e); //disable for now
     });
 
     socket.on("connected", function (data) {
       //Connect New Client Event
+      toast.success(`${data.user} Joined! 👍`)
       users[data.user] = data.color;
       insertWidget(data);
       let sendCurrentData = [
         {
           code: editor.getValue(),
           lang: langRef.current.value,
+          drawing: drawings.current
         },
       ];
       socket.emit("filedata", sendCurrentData);
@@ -184,7 +193,10 @@ const IDE = ({ socket }) => {
     };
   }
 
-  const sendCode = () => {
+  useEffect(() => {
+    if (sendCode === 0) {
+      return;
+    }
     let encodedCode = btoa(editorRef.current.getValue());
 
     let encodedArgs = btoa(editorData.args);
@@ -194,27 +206,34 @@ const IDE = ({ socket }) => {
     params.append("code", encodedCode);
     params.append("args", encodedArgs);
     params.append("lang", encodedLang);
-
+    const controller = new AbortController();
     const config = {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-      },
+      }, signal: controller.signal
     };
+
+
+    const loadingResponse = toast.loading("Code submitted! Please wait...")
     axios
       .post(`${API}/code`, params, config)
       .then((response) => {
         var response3 = atob(response.data);
-        socket.emit("outputcode", response3);
         document.getElementById("outputCode").value = response3;
+        toast.update(loadingResponse, { render: "Response Recieved! 😄", type: "success", isLoading: false, autoClose: 2000, theme: "dark", pauseOnFocusLoss: false });
       })
       .catch((err) => {
-        socket.emit("outputcode", err);
+        toast.update(loadingResponse, { render: "Cannot compile code! 😶", type: "error", isLoading: false, autoClose: 2000, theme: "dark", pauseOnFocusLoss: false });
       });
-  };
+
+    return () => {
+      controller.abort();
+    };
+    // eslint-disable-next-line
+  }, [sendCode]);
 
   const EditorTheme = () => {
     if (darkToggleRef.current.checked) {
-      console.log(darkToggleRef.current.checked);
       localStorage.setItem("mode", "dark");
       setDarkMode(true);
     } else {
@@ -222,6 +241,13 @@ const IDE = ({ socket }) => {
       setDarkMode(false);
     }
   };
+
+  const handleEditorChange = (value) => {
+    sessionStorage.setItem(langRef.current.value, value)
+  }
+  const defaultEditorValue = () => {
+    return sessionStorage.getItem(langRef.current.value) || ExampleCode[langRef.current.value]
+  }
   return (
     <>
       <div
@@ -245,7 +271,6 @@ const IDE = ({ socket }) => {
               ref={langRef}
               onChange={() => {
                 setEditorData({ lang: langRef.current.value });
-                localStorage.setItem("language", langRef.current.value);
               }}
             >
               <option value="0">Language</option>
@@ -256,16 +281,15 @@ const IDE = ({ socket }) => {
           </div>
           <button
             type="button"
-            className={`btn btn-outline-dark px-3 py-1 text-nowrap mx-1 rounded-0 ${
-              darkMode ? "white-btn" : ""
-            }`}
+            className={`btn btn-outline-dark px-3 py-1 text-nowrap mx-1 rounded-0 ${darkMode ? "white-btn" : ""
+              }`}
             style={{
               border: "1px solid black",
               fontSize: "14px",
               boxShadow: "none",
             }}
             onClick={() => {
-              sendCode();
+              setSendCode(sendCode + 1);
             }}
           >
             Run
@@ -290,10 +314,12 @@ const IDE = ({ socket }) => {
           language={langRef.current.value}
           beforeMount={handleEditorWillMount}
           onMount={handleEditorDidMount}
-          value={ExampleCode[langRef.current.value]}
+          value={defaultEditorValue()}
           loading={<Loader />}
+          onChange={handleEditorChange}
         />
       </div>
+      <ToastContainer pauseOnFocusLoss={false} />
     </>
   );
 };

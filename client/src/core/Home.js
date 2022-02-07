@@ -16,10 +16,10 @@ const Home = () => {
                 <div className='d-flex w-100'><LeftHeroSection /></div>
                 {/* <div className='d-flex w-50 '><img src={heroImg} alt="heroImg" className='w-100'/> </div> */}
             </div>
-            <About/>
-            
-            <Footer/>
-            
+            <About />
+
+            <Footer />
+
         </div>
     )
 }
