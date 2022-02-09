@@ -25,11 +25,11 @@ A multi user live collaboration monaco code editor which can compile code in 3 l
 ## Setup Environment (Server)
 
 - `DB_HOST=localhost`
-  `DB_USER=[your-db-username-here]`
-  `DB_PASSWORD=[your-db-password-here]`
-  `DB_DATABASE=[your-database-here]`
-  `SECRET=[your-token-secret-here]`
-  `REFRESHSECRET=[your-refresh-token-secret-here]`
+- `DB_USER=[your-db-username-here]`
+- `DB_PASSWORD=[your-db-password-here]`
+- `DB_DATABASE=[your-database-here]`
+- `SECRET=[your-token-secret-here]`
+- `REFRESHSECRET=[your-refresh-token-secret-here]`
 
 ## Installation (Server)
 
