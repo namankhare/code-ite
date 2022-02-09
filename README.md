@@ -37,6 +37,10 @@ A multi user live collaboration monaco code editor which can compile code in 3 l
 - `npm install`
 - To start the server use `npm start `
 
+## Database
+
+- import `code-ite.sql` into your mysql database.
+
 ## Authors
 
 Contributors names and contact info
