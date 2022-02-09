@@ -1,7 +1,9 @@
 const express = require('express')
 const useRouter = express.Router()
 const { isSignedIn } = require('./controller/auth');
+const cookieParser = require("cookie-parser");
 
+useRouter.use(cookieParser());
 //Authentication Router
 const authRouter = require('./routes/authRouter');
 useRouter.use('/auth', authRouter);

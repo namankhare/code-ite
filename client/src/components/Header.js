@@ -15,15 +15,18 @@ const Header = () => {
 
   const logout = () => {
     setIsLoggedIn(false);
-    sessionStorage.clear();
+    localStorage.removeItem('refreshtoken');
+    sessionStorage.removeItem('token')
+    localStorage.removeItem('name')
   }
 
   return (
     <>
       <div>
         <nav
-          className={`navbar navbar-expand-lg navbar-light bg-light px-3 ${darkMode ? "navDark" : ""
+          className={`navbar navbar-expand-lg navbar-light px-3 shadow-sm ${darkMode ? "navDark" : ""
             }`}
+          style={{ backgroundColor: "#fff" }}
         >
           <div className="container-fluid px-4">
             {isLoggedIn ? (
@@ -61,10 +64,8 @@ const Header = () => {
                   <span className=" mx-3 my-1 h5">
 
                     <h5 className={` mx-3 my-1 h5 ${darkMode ? "textColor" : ""
-                      }`}>{sessionStorage.getItem('name')}</h5>
+                      }`}>{localStorage.getItem('name')}</h5>
                   </span>
-
-
                   <button
                     type="button"
                     onClick={() => { logout() }}
@@ -84,12 +85,12 @@ const Header = () => {
 
                 {window.location.pathname === "/" ?
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0 ">
-                    <Link to="#">
+                    <a href="https://github.com/namankhare/code-ite/issues" target="_blank" rel="noreferrer" referrerPolicy="origin">
                       <li className="nav-item">
                         <span className={`nav-link mx-3 my-1 h5 ${darkMode ? "textColor" : ""
                           }`}>Support</span>
                       </li>
-                    </Link>
+                    </a>
                     <Link to="/#about" onClick={() => {
                       executeScroll()
                     }}>

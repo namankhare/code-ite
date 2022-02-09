@@ -1,4 +1,8 @@
+import axios from "axios";
 import { useState, createContext, useRef } from "react";
+import { API } from "../backend";
+
+
 const initialEditorData = {
   lang: "",
   args: "",
@@ -49,12 +53,34 @@ const ContextProvider = ({ children }) => {
   };
 
   if (!isLoggedIn) {
-    const decodedJwt = parseJwt(sessionStorage.getItem("jwt"));
+    const decodedJwt = parseJwt(sessionStorage.getItem('token'));
     try {
       if (decodedJwt.exp * 1000 > Date.now()) {
         setIsLoggedIn(true)
       } else {
-        sessionStorage.clear()
+        if (localStorage.getItem('refreshtoken')) {
+          axios
+            .post(`${API}/auth/renewAccessToken`, {
+              refreshToken: localStorage.getItem('refreshtoken')
+            }, {
+              headers: { Authorization: `Bearer ${localStorage.getItem('refreshtoken')}` },
+              withCredentials: true
+            })
+            .then((resoponse) => {
+              sessionStorage.setItem('token', resoponse.data.token)
+              localStorage.setItem('refreshtoken', resoponse.data.refreshToken)
+              setIsLoggedIn(true)
+            })
+            .catch((error) => {
+              console.log(error)
+              setIsLoggedIn(false)
+              sessionStorage.removeItem('token',)
+              localStorage.removeItem('refreshtoken')
+              localStorage.removeItem('name')
+            })
+
+        }
+        //
       }
     } catch (error) {
       //

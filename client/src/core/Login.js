@@ -38,8 +38,9 @@ const Login = () => {
         toast.update(loginResponse, { render: "Login Successful! 😄", type: "success", isLoading: false, autoClose: 3500, theme: "dark", closeOnClick: true, draggable: true });
         setIsLoggedIn(true);
         setLoginState({ name: response.data.user.name, email: response.data.user.email, error: false });
-        sessionStorage.setItem("jwt", response.data.token);
-        sessionStorage.setItem('name', response.data.user.name)
+        localStorage.setItem("refreshtoken", response.data.refreshToken);
+        localStorage.setItem('name', response.data.user.name)
+        sessionStorage.setItem('token', response.data.token)
         setTimeout(() => {
           navigate('/')
         }, 2000);

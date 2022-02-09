@@ -1,6 +1,6 @@
 :root {
   --clr-light: #fff;
-  --clr-dark: #121212;
+  --clr-dark: #181818;
   --clr-secondaryDark: #1e1e1e;
   --clr-text: #242424;
   --clr-secondary: #bb86fc;
@@ -9,7 +9,8 @@
 }
 
 .navDark {
-  background: var(--nav-bg) !important;
+  background: var(--clr-dark) !important;
+  border-bottom: 1px solid rgb(99, 98, 98);
 }
 
 .PrimaryDark {

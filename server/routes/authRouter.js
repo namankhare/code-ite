@@ -2,6 +2,7 @@ const express = require('express')
 let jwt = require('jsonwebtoken');
 const authRouter = express.Router()
 const pool = require('../config/db');
+const { isValidRefreshToken } = require('../controller/auth');
 
 
 
@@ -11,6 +12,7 @@ authRouter.route('/login')
         next()
     })
     .post((req, res, next) => {
+        console.log("cookie:", req.cookies.token)
         pool.getConnection((err, conn) => {
             if (err) {
                 console.log(err);
@@ -27,9 +29,9 @@ authRouter.route('/login')
                     else {
                         if (data.length > 0) {
                             delete data[0].password;
-                            let token = jwt.sign({ _id: data[0].id, email: data[0].email }, process.env.SECRET, { expiresIn: "10s" });
-                            res.cookie("token", token, { expire: new Date() + 9999, sameSite: true, path: '/', httpOnly: true })
                             const { id, name, email } = data[0]
+                            let token = jwt.sign({ _id: id, email: email, name: name }, process.env.SECRET, { expiresIn: "60s" });
+                            res.cookie("token", token, { expire: new Date() + 9999, sameSite: "None", secure: true })
                             let refreshToken = jwt.sign({ _id: data[0].id }, process.env.REFRESHSECRET, { expiresIn: "7d" });
                             return res.json({ user: { id, name, email }, token: token, refreshToken: refreshToken });
                         } else {
@@ -74,16 +76,21 @@ authRouter.route('/signup')
     })
 
 authRouter.route('/renewAccessToken')
-    .post((req, res) => {
-        console.log('Cookies: ', req.auth)
+    .all((req, res, next) => {
+        res.statusCode = 200
+        next()
+    })
+    .post(isValidRefreshToken, (req, res) => {
+        console.log(req.auth)
         const oldAccessToken = req.cookies.token
-        const refreshToken = req.body.token
+        const refreshToken = req.body.refreshToken
         if (!refreshToken) {
             return res.json({ message: "User not authenticated!" })
         }
-        let token = jwt.sign(req.auth, process.env.SECRET, { expiresIn: "30s" });
-        let nreRefreshToken = jwt.sign({ _id: data[0].id }, process.env.REFRESHSECRET, { expiresIn: "7d" });
-        return res.json({ message: "fix kr isko" })
+        let token = jwt.sign({ _id: req.auth._id }, process.env.SECRET, { expiresIn: "60s" });
+        res.cookie("token", token, { expire: new Date() + 9999, sameSite: "None", secure: true })
+        let newRefreshToken = jwt.sign({ _id: req.auth._id }, process.env.REFRESHSECRET, { expiresIn: "7d" });
+        return res.json({ token: token, refreshToken: newRefreshToken })
     })
 
 

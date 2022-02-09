@@ -42,9 +42,8 @@ const LeftHeroSection = () => {
               />
               <button
                 onClick={() => navigate(`/room/${joinFormValue.current.value}`)}
-                className={`btn btn-dark my-4 px-4 py-3 rounded-0 ${
-                  darkMode ? "white-btn" : ""
-                }`}
+                className={`btn btn-dark my-4 px-4 py-3 rounded-0 ${darkMode ? "white-btn" : ""
+                  }`}
               >
                 <i className="fas fa-sign-in-alt"></i> Enter Room
               </button>
@@ -64,9 +63,8 @@ const LeftHeroSection = () => {
               </Link>
               <button
                 onClick={() => setJoinForm(!joinForm)}
-                className={`btn btn-outline-dark my-2 ms-3 justify-between  px-3 py-3 rounded-0 ${
-                  darkMode ? "black-btn" : ""
-                }`}
+                className={`btn btn-outline-dark my-2 ms-3 justify-between  px-3 py-3 rounded-0 ${darkMode ? "black-btn" : ""
+                  }`}
               >
                 <i className="fas fa-sign-in-alt"></i> Join Room
               </button>
