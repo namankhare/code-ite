@@ -3,6 +3,7 @@ const codeRouter = express.Router()
 const fs = require('fs')
 const cCompiler = require('../compiler/c')
 const cppCompiler = require('../compiler/cpp')
+const javaCompiler = require('../compiler/java')
 // args //code //lang
 //encode / decode
 const decodeRes = (str) => {
@@ -47,7 +48,7 @@ codeRouter.route('/')
                     deleteFile('a.exe')
                 })
                 .catch(err => {
-                    console.log("ERROR PROMISE " + err)
+                    res.end(JSON.stringify(err));
                     deleteFile('input.txt')
                     deleteFile('main.c')
                     deleteFile('a.exe')
@@ -61,10 +62,26 @@ codeRouter.route('/')
                     deleteFile('a.exe')
                 })
                 .catch(err => {
-                    console.log("ERROR PROMISE " + err)
+                    res.end(JSON.stringify(err));
                     deleteFile('input.txt')
                     deleteFile('main.cpp')
                     deleteFile('a.exe')
+                })
+            case "java": return javaCompiler.javaExecute(code, args)
+                .then(data => {
+                    var output = encodeRes(data)
+                    res.end(JSON.stringify(output));
+                    deleteFile('Main.class')
+                    deleteFile('Main.Java')
+                    deleteFile('myObjects.txt')
+                    deleteFile('input.txt')
+                })
+                .catch(err => {
+                    res.end(JSON.stringify(err));
+                    deleteFile('Main.class')
+                    deleteFile('Main.Java')
+                    deleteFile('myObjects.txt')
+                    deleteFile('input.txt')
                 })
         }
     })

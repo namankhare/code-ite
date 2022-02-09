@@ -20,7 +20,7 @@ A multi user live collaboration monaco code editor which can compile code in 3 l
 
 - `cd client`
 - `npm install`
-- If you want to run at https:// use run as `npm dev` else use `npm start `
+- If you want to run at https:// use run as `yarn dev` else use `npm start `
 
 ## Setup Environment (Server)
 
@@ -30,6 +30,7 @@ A multi user live collaboration monaco code editor which can compile code in 3 l
 - `DB_DATABASE=[your-database-here]`
 - `SECRET=[your-token-secret-here]`
 - `REFRESHSECRET=[your-refresh-token-secret-here]`
+- `FRONTEND_URL="https://localhost:3000"`
 
 ## Installation (Server)
 
