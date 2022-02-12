@@ -83,7 +83,10 @@ const ContextProvider = ({ children }) => {
         //
       }
     } catch (error) {
-      //
+      setIsLoggedIn(false)
+      sessionStorage.removeItem('token',)
+      localStorage.removeItem('refreshtoken')
+      localStorage.removeItem('name')
     }
   }
 

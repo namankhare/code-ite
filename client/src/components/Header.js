@@ -12,7 +12,21 @@ const Header = () => {
   const executeScroll = () => {
     scroll.current.scrollIntoView()
   }
-
+  function randomDisplayName() {
+    return Math.round(Math.random() * 10000);
+  }
+  const username = () => {
+    if (!localStorage.getItem('name') && !localStorage.getItem("username")) {
+      let newUsername = "Anonymous" + randomDisplayName();
+      localStorage.setItem("username", newUsername);
+      setIsLoggedIn(false)
+      return newUsername;
+    } else {
+      let fetchUsername;
+      (localStorage.getItem('name')) ? fetchUsername = localStorage.getItem('name') : fetchUsername = localStorage.getItem("username")
+      return fetchUsername;
+    }
+  };
   const logout = () => {
     setIsLoggedIn(false);
     localStorage.removeItem('refreshtoken');
@@ -103,7 +117,13 @@ const Header = () => {
 
                 <form className="d-flex ms-auto" >
                   <CollaborationIcons />
+                  <span className=" mx-3 my-1 h5">
+
+                    <h5 className={` mx-3 my-1 h5 ${darkMode ? "textColor" : ""
+                      }`}>{window.location.pathname.split("/")[1] === 'room' ? `hi,${username()}` : ""}</h5>
+                  </span>
                   <Link to="/login" className="me-4 ">
+
                     <button
                       type="button"
                       className={`btn btn-outline-dark text-nowrap px-4 py-2 rounded-0 ${darkMode ? "white-btn" : ""

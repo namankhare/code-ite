@@ -195,6 +195,7 @@ const Whiteboard = ({ socket }) => {
 
     const onColorUpdate = (e) => {
       const key = e.target.className.split(" ")[1];
+      clickPencil();
       switch (key) {
         case "black":
           current.color = "black";
@@ -450,6 +451,7 @@ const Whiteboard = ({ socket }) => {
               height="22px"
               width="22px"
               className="mx-2"
+              style={{ "cursor": "pointer" }}
               onClick={() => clickPencil()}
             />
             <img
@@ -458,6 +460,7 @@ const Whiteboard = ({ socket }) => {
               height="22px"
               width="22px"
               className="mx-2 customCursor"
+              style={{ "cursor": "pointer" }}
               onClick={() => clickEraser()}
             />
             <img
@@ -466,6 +469,7 @@ const Whiteboard = ({ socket }) => {
               height="22px"
               width="22px"
               className="mx-2"
+              style={{ "cursor": "pointer" }}
               onClick={() => Clear()}
             />
           </div>
