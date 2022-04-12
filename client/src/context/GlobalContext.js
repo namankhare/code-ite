@@ -53,7 +53,7 @@ const ContextProvider = ({ children }) => {
   };
 
   if (!isLoggedIn) {
-    const decodedJwt = parseJwt(sessionStorage.getItem('token'));
+    const decodedJwt = parseJwt(sessionStorage.getItem('token')) || "";
     try {
       if (decodedJwt.exp * 1000 > Date.now()) {
         setIsLoggedIn(true)
